@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaz de Inicio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 m-0 p-0">
+
+    <!-- Contenedor del header -->
+    <header class=" bg-pink-700 w-full max-w-[1400px] h-[70px] flex items-center justify-between px-6 md:px-16 relative">
+        
+        <!-- Botón de menú (Solo visible en móviles) -->
+        <button id="menu-btn" class="text-black text-3xl md:hidden focus:outline-none">
+            ☰
+        </button>
+
+        <ul id="menu" class="hidden md:flex md:flex-row list-none space-x-6 text-black text-lg">
+            <li class="hover:text-[#d0d0d0] cursor-pointer"><a href="">Devices</a></li>
+            <li class="hover:text-[#dbd9d9] cursor-pointer"><a href="">Users</a></li>
+            <li class="hover:text-[#c3c1c1] cursor-pointer"><a href="{{ url_for('departament.departament') }}">Departaments</a></li>
+            <li class="hover:text-[#d7d7d7] cursor-pointer"><a href="">Profile</a></li>
+            <li class="hover:text-[#c8c6c6] cursor-pointer"><a href="">LogOut</a></li>
+        </ul>
+
+        <!-- Menú desplegable en móviles -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full  bg-pink-700 flex flex-col items-center space-y-4 py-4 shadow-lg">
+            <a href="" class="text-black text-lg hover:text-[#c8c6c6]">Devices</a>
+            <a href="" class="text-black text-lg hover:text-[#c8c6c6]">Users</a>
+            <a href="{{ url_for('departament.departament') }}" class="text-black text-lg hover:text-[#fff]">Departaments</a>
+            <a href="" class="text-black text-lg hover:text-[#c8c6c6]">Profile</a>
+            <a href="" class="text-black text-lg hover:text-[#c8c6c6]">LogOut</a>
+        </div>
+
+    </header>
+    <main class=" m-0 p-0 bg-gray-900">
+
+    </main>
+
+    <!-- Script para mostrar menú en móviles -->
+    <script>
+        document.getElementById("menu-btn").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+    </script>
+
+</body>
+</html>

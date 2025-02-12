@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Login</title>
+</head>
+
+<body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen font-sans text-gray-200">
+    <form action="{{ url_for('user.login') }}" method="POST" id="login_container"
+        class="bg-gray-800 w-full sm:w-96 flex flex-col items-center rounded-xl shadow-2xl p-8 space-y-6 border-t-4 border-red-600 max-w-lg">
+        
+        <div id="title" class="text-4xl font-bold text-red-400">
+            <h1>Login</h1>
+        </div>
+
+        <!-- Username -->
+        <div class="w-full">
+            <label for="username" class="text-lg text-gray-300">Username</label>
+            <input type="text" name="username" required
+                class="mt-2 p-3 w-full border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+
+        <!-- Password -->
+        <div class="w-full">
+            <label for="password" class="text-lg text-gray-300">Password</label>
+            <input type="password" name="password"
+                class="mt-2 p-3 w-full border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+
+        <!-- Sign In Button -->
+        <div class="mt-6 w-full flex justify-center">
+            <input type="submit" value="Sign In"
+                class="w-48 bg-red-600 text-white py-3 rounded-lg hover:bg-red-500 transition-colors duration-300 cursor-pointer">
+        </div>
+
+        <!-- Link to Register -->
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-400">Don't have an account? 
+                <a href="{{ url_for('user.register') }}" class="text-red-400 hover:text-red-300">Register here</a>
+            </p>
+        </div>
+        
+    </form>
+</body>
+
+</html>
