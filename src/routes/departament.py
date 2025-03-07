@@ -1,34 +1,45 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask_login import login_required, current_user
 from models.mddepartament import db, Departament
 
 departament_bp = Blueprint("departament", __name__)
 
 @departament_bp.route('/departaments', methods=['GET', 'POST'])
+@login_required
 def departament():
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))  # Redirige al login o a otra página segura
+
     if request.method == 'POST': 
-        namedepartament = request.form['namedepartaments'].strip()  # Elimina espacios en blanco
+        namedepartament = request.form['namedepartaments'].strip() 
         
         # Verificar si el departamento ya existe
-        existing_departament = Departament.query.filter_by(namedepartament=namedepartament).first()
+        existing_departament = Departament.query.filter_by(named=namedepartament).first()
         
         if existing_departament:
             flash("Este departamento ya existe", "error")
         else:
-            newdepartament = Departament(namedepartament=namedepartament)
+            newdepartament = Departament(named=namedepartament)
             db.session.add(newdepartament)
             db.session.commit()
             flash("Registro exitoso", "success")
         
-        return redirect(url_for('departament.departament'))  # Evitar reenvío de formularios
+        return redirect(url_for('departament.departament'))
 
     # Obtener todos los departamentos de la base de datos
     departamentos = Departament.query.all()
-    return render_template("departaments.html", departamentos=departamentos)
-
+    return render_template("departaments.html", departamentos= departamentos)
 
 @departament_bp.route('/delete/<int:id>', methods=['POST'])
+@login_required
 def delete(id):
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+
     departamento = Departament.query.get(id)
+
     if departamento:
         db.session.delete(departamento)
         db.session.commit()
@@ -39,7 +50,12 @@ def delete(id):
     return redirect(url_for('departament.departament'))
 
 @departament_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update(id):
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+
     departamento = Departament.query.get(id)
     
     if request.method == 'POST':
@@ -48,7 +64,7 @@ def update(id):
         
         # Actualizar los campos del departamento
         if departamento:
-            departamento.namedepartament = namedepartament
+            departamento.named = namedepartament
             db.session.commit()
             flash("Departamento actualizado correctamente", "success")
             return redirect(url_for('departament.departament'))  # Redirige a la lista de departamentos
@@ -62,6 +78,3 @@ def update(id):
     else:
         flash("Departamento no encontrado", "error")
         return redirect(url_for('departament.departament'))
-
-
-

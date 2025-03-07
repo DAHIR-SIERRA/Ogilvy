@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaz de Inicio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 m-0 p-0 text-white">
+    <header
+        class="bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 w-full max-w-[1788px] h-[80px] flex items-center justify-between px-6 md:px-16 relative shadow-lg rounded-b-lg">
+        <button id="menu-btn" class="text-white text-4xl md:hidden focus:outline-none">
+            ☰
+        </button>
+        <a href="{{ url_for('user.logout') }}"
+            class="text-white text-lg font-semibold hover:text-blue-200 transition duration-300 absolute top-5 right-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-log-out">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+            </svg>
+        </a>
+
+
+        <div id="mobile-menu"
+            class="fixed top-0 left-0 h-full w-64 bg-gray-900 shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col items-center py-6 space-y-2 border-r border-gray-700">
+            
+            <!-- Botón de cerrar -->
+            <button id="close-menu" class="absolute top-4 right-4 text-white text-2xl">
+                ✖
+            </button>
+
+            <!-- Elementos del menú con separadores -->
+            <a href="{{ url_for('homeSoport.home') }}"
+                class="text-white text-lg font-semibold hover:text-yellow-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
+                Home
+            </a>
+            <a href="{{ url_for('devi.devices') }}"
+                class="text-white text-lg font-semibold hover:text-blue-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
+                Devices
+            </a>
+            <a href="{{ url_for('departament.departament') }}"
+                class="text-white text-lg font-semibold hover:text-green-300 transition duration-300 w-full text-center py-3 border-b border-gray-600 ">
+                Departments
+            <a href="{{ url_for('posi.position') }}"
+                class="text-white text-lg font-semibold hover:text-cyan-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
+                Position
+            </a>
+            <a href="{{ url_for('user.logout') }}"
+                class="text-white text-lg font-semibold hover:text-gray-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
+                LogOut
+            </a>
+        </div>
+
+        <ul id="menu" class="hidden md:flex md:flex-row list-none space-x-6 text-white text-lg font-semibold">
+            <li class="hover:text-green-300 transition duration-300 cursor-pointer">
+                <a href="{{ url_for('homeSoport.home') }}">Home</a>
+            </li>
+            <li class="hover:text-yellow-300 transition duration-300 cursor-pointer">
+                <a href="{{ url_for('devi.devices') }}">Devices</a>
+            </li>
+            <li class="hover:text-blue-300 transition duration-300 cursor-pointer">
+                <a href="{{ url_for('departament.departament') }}">Departments</a>
+            </li>
+            <li class="hover:text-cyan-300 transition duration-300 cursor-pointer">
+                <a href="{{ url_for('posi.position') }}">Position</a>
+            </li>
+        </ul>
+
+
+    </header>
+
+    <main class="p-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="w-full max-w-lg mb-4">
+            {% for category, message in messages %}
+            <div class="p-4 text-white rounded-lg text-center 
+                                  {% if category == 'error' %} bg-rose-600 
+                                  {% elif category == 'success' %} bg-emerald-500 
+                                  {% else %} bg-gray-700 {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="overflow-x-auto bg-gray-900 p-4 shadow-md rounded-lg">
+            <div class="mb-4 flex">
+                <input type="text" id="search-user" placeholder="Search by Username..."
+                    class="w-[250px] p-2 text-gray-900 rounded-md border border-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
+            </div>
+            <table class="table-auto w-full border-collapse border border-gray-600" id="user-table">
+                <thead>
+                    <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
+                        <th class="border border-gray-600 px-4 py-2">User</th>
+                        <th class="border border-gray-600 px-4 py-2">Fullname</th>
+                        <th class="border border-gray-600 px-4 py-2">idDocument</th>
+                        <th class="border border-gray-600 px-4 py-2">Email</th>
+                        <th class="border border-gray-600 px-4 py-2">Rol</th>
+                        <th class="border border-gray-600 px-4 py-2">Department</th>
+                        <th class="border border-gray-600 px-4 py-2">Position</th>
+                        <th class="border border-gray-600 px-4 py-2">Serial</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user, departament_name, position_name in get_key %}
+                    <tr ondblclick="copyToForm(this)"
+                        class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
+                        <td class="border border-gray-600 px-4 py-2">{{ user.username }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.fullname }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.idDocument }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.email }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.rol }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ departament_name if departament_name else "Sin
+                            Departamento" }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ position_name if position_name else "Sin
+                            Posición" }}</td>
+                        <td class="border border-gray-600 px-4 py-2">
+                            <form action="{{ url_for('user.view_serial') }}" method="POST">
+                                <input type="hidden" name="serial" value="{{ user.device_serial }}">
+                                <button type="submit" class="text-blue-300 hover:text-blue-600">{{
+                                    user.device_serial }}</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+
+
+        <div class="mt-6 p-4 bg-gray-900 bg-opacity-90 rounded-lg shadow-md">
+            <form id="user-form" action="{{ url_for('user.assignment') }}" method="POST" class="overflow-x-auto">
+                <input type="hidden" name="action" id="form-action" value="assign">
+
+                <table class="w-full border-collapse border border-gray-700 text-sm">
+                    <thead class="bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 text-black text-center">
+                        <tr>
+                            <th class="border border-gray-700 px-3 py-1">Username</th>
+                            <th class="border border-gray-700 px-3 py-1">Fullname</th>
+                            <th class="border border-gray-700 px-3 py-1">ID Document</th>
+                            <th class="border border-gray-700 px-3 py-1">Rol</th>
+                            <th class="border border-gray-700 px-3 py-1">Serial of Device</th>
+                            <th class="border border-gray-700 px-3 py-1">Observations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-gray-800 hover:bg-gray-700 transition text-white">
+                            <td class="border border-gray-700 px-3 py-1">
+                                <input type="text" id="form-username" name="username"
+                                    class="bg-transparent text-white w-full outline-none text-center" readonly>
+                            </td>
+                            <td class="border border-gray-700 px-3 py-1">
+                                <input type="text" id="form-fullname" name="fullname"
+                                    class="bg-transparent text-white w-full outline-none text-center" readonly>
+                            </td>
+                            <td class="border border-gray-700 px-3 py-1">
+                                <input type="text" id="form-idDocument" name="idDocument"
+                                    class="bg-transparent text-white w-full outline-none text-center" readonly>
+                            </td>
+                            <td class="border border-gray-700 px-3 py-1">
+                                <select name="rol" id="form-rol"
+                                    class="bg-gray-900 text-white w-full outline-none border border-gray-500 rounded px-2 py-1 text-center">
+                                    <option value="User" class="text-white">User</option>
+                                    <option value="Admin" class="text-white">Admin</option>
+                                </select>
+                            </td>
+                            <td class="border border-gray-700 px-3 py-1">
+                                <input type="text" id="form-serial"
+                                    class="bg-transparent text-white w-full text-center outline-none" name="serial">
+                            </td>
+                            <td class="border border-gray-700 px-3 py-1">
+                                <input type="text" name="observations"
+                                    class="bg-transparent text-white w-full text-center outline-none">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center mt-4">
+                    <button type="submit" onclick="document.getElementById('form-action').value='assign'"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-200 shadow-md">
+                        Assign
+                    </button>
+
+                    <button type="submit" onclick="document.getElementById('form-action').value='delete'"
+                        class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-all duration-200 shadow-md">
+                        Descollate
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        </form>
+
+
+        </div>
+
+        <div class="overflow-x-auto mt-4 bg-gray-900 bg-opacity-90 p-4 rounded-lg shadow-md">
+            <div class="mb-4 flex">
+                <input type="text" id="search-serial" placeholder="Search by Seriel..."
+                    class="w-[250px] p-2 text-gray-900 rounded-md border border-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
+            </div>
+            <table id="serial-table" class="w-full border-collapse border border-gray-600 rounded-lg text-gray-300">
+                <thead class="bg-gray-800 text-white text-sm uppercase tracking-wide">
+                    <tr>
+                        <th class="border border-gray-600 px-4 py-2">Brand</th>
+                        <th class="border border-gray-600 px-4 py-2">Model</th>
+                        <th class="border border-gray-600 px-4 py-2">State</th>
+                        <th class="border border-gray-600 px-4 py-2">Serial</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in get_all_serials %}
+                    <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer text-center">
+                        <td class="border border-gray-600 px-4 py-2">{{ user.brand }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.model }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.state }}</td>
+                        <td class="border border-gray-600 px-4 py-2 flex items-center justify-center space-x-2">
+                            <span id="serial-{{ loop.index }}" class="text-gray-300">{{ user.device_serial }}</span>
+                            <button onclick="copyToClipboard(this)"
+                                class="text-white px-2 py-1 rounded-md hover:bg-blue-700 transition-all duration-200 shadow-md">
+                                📋
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        function copyToForm(row) {
+            let cells = row.getElementsByTagName("td");
+            document.getElementById("form-username").value = cells[0].innerText;
+            document.getElementById("form-fullname").value = cells[1].innerText;
+            document.getElementById("form-idDocument").value = cells[2].innerText;
+            document.getElementById("form-rol").value = cells[4].innerText;
+            document.getElementById("form-serial").value = cells[7].innerText;
+        }
+
+
+        document.getElementById("menu-btn").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.remove("-translate-x-full");
+        });
+
+        document.getElementById("close-menu").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.add("-translate-x-full");
+        });
+
+
+        function filterTable(inputId, tableId, columnIndex) {
+            document.getElementById(inputId).addEventListener("input", function () {
+                let filter = this.value.toLowerCase();
+                let rows = document.querySelectorAll(`#${tableId} tbody tr`);
+                rows.forEach(row => {
+                    let cell = row.getElementsByTagName("td")[columnIndex];
+                    if (cell) {
+                        let text = cell.textContent.toLowerCase();
+                        row.style.display = text.includes(filter) ? "" : "none";
+                    }
+                });
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            filterTable("search-user", "user-table", 0),
+                filterTable("search-serial", "serial-table", 3);
+        });
+
+
+        function copyToClipboard(button) {
+            // Encuentra el <td> más cercano al botón
+            const tdElement = button.closest("td");
+
+            if (tdElement) {
+                // Obtiene el texto del <span> dentro del mismo <td>
+                const textToCopy = tdElement.querySelector("span").innerText;
+
+                // Copia el texto al portapapeles
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert("Copiado: " + textToCopy);
+                }).catch(err => {
+                    console.error("Error al copiar: ", err);
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

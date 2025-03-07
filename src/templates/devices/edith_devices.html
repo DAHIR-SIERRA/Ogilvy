@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Device</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white p-6">
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="w-full max-w-lg mb-4">
+        {% for category, message in messages %}
+        <div class="p-4 text-white rounded-lg text-center 
+                          {% if category == 'error' %} bg-rose-600 
+                          {% elif category == 'success' %} bg-emerald-500 
+                          {% else %} bg-gray-700 {% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="container mx-auto max-w-3xl bg-gray-800 p-8 rounded-lg shadow-lg">
+
+        <!-- Title -->
+        <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Edit Device</h1>
+
+        {% if get_device %}
+        <!-- Edit Form -->
+        <form action="{{ url_for('edi.update_device') }}" method="POST" class="space-y-4">
+            <input type="hidden" name="id" value="{{ get_device.id }}">
+
+            <!-- ID -->
+            <div>
+                <label class="block text-sm font-medium">ID</label>
+                <input type="text" name="id" value="{{ get_device.id}}"
+                    class="w-full p-2 rounded bg-gray-700 text-white outline-none" readonly>
+            </div>
+
+            <!-- Brand and Model -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium">Brand</label>
+                    <input type="text" name="brand" value="{{ get_device.brand }}"
+                        class="w-full p-2 rounded bg-gray-700 text-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Model</label>
+                    <input type="text" name="model" value="{{ get_device.model }}"
+                        class="w-full p-2 rounded bg-gray-700 text-white outline-none">
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-2 gap-4">
+                {% for field, label in { 'device_serial':'Serial', 'serie': 'Series', 'activo': 'Active', 'processor': 'Processor',
+                'RAM': 'RAM Memory', 'hard_disk': 'Hard Drive', 'screen': 'Screen', 'charger': 'Charger',
+                'keyboard': 'Keyboard', 'mouse': 'Mouse', 'active_tablet': 'Active Tablet', 'serial_tablet': 'Tablet Serial'
+                }.items() %}
+                
+                <div>
+                    <label class="block text-sm font-medium">{{ label }}</label>
+                    <input type="text" name="{{ field }}" value="{{ get_device[field] if get_device[field] else '' }}"
+                        class="w-full p-2 rounded bg-gray-700 text-white outline-none">
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Selections -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium">Equipment Type</label>
+                    <select name="type_equipment" class="w-full p-2 rounded bg-gray-700 text-white outline-none">
+                        {% for option in ['Desktop','Laptop'] %}
+                        <option value="{{ option }}" {% if get_device.type_equipment == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% for field, label in {'multi_adapter': 'Multiple Adapter', 'base': 'Base'}.items() %}
+                <div>
+                    <label class="block text-sm font-medium">{{ label }}</label>
+                    <select name="{{ field }}" class="w-full p-2 rounded bg-gray-700 text-white outline-none">
+                        <option value="YES" {% if get_device[field] == 'YES' %}selected{% endif %}>YES</option>
+                        <option value="NO" {% if get_device[field] == 'NO' %}selected{% endif %}>NO</option>
+                    </select>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Observations -->
+            <div>
+                <label class="block text-sm font-medium">Observations</label>
+                <textarea name="observations" rows="3"
+                    class="w-full p-2 rounded bg-gray-700 text-white outline-none">{{ get_device.observations if get_device.observations else '' }}</textarea>
+            </div>
+
+            <!-- Save Button -->
+            <div class="flex justify-end mt-6">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded shadow">Save Changes</button>
+            </div>
+        </form>
+
+        {% else %}
+        <!-- Error message if device is not found -->
+        <div class="text-center text-red-500 text-xl font-semibold">
+            <p>Device not found.</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</body>
+
+</html>

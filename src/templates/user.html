@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interfaz de Inicio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </head>
 
 <body class="bg-gray-900 text-white">
@@ -42,9 +41,9 @@
                 class="text-white text-lg font-semibold hover:text-blue-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
                 Devices
             </a>
-            <a href="{{ url_for('user.assignment') }}"
+            <a href="{{ url_for('user.users') }}"
                 class="text-white text-lg font-semibold hover:text-green-300 transition duration-300 w-full text-center py-3 border-b border-gray-600 ">
-                Assignment
+                Users
             </a>
             <a href="{{ url_for('departament.departament') }}"
                 class="text-white text-lg font-semibold hover:text-yellow-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
@@ -67,7 +66,7 @@
             <li class="hover:text-yellow-300 transition duration-300 cursor-pointer"><a
                     href="{{ url_for('devi.devices') }}">Devices</a></li>
             <li class="hover:text-green-300 transition duration-300 cursor-pointer"><a
-                    href="{{ url_for('user.assignment') }}">Assignment</a></li>
+                    href="{{ url_for('user.users') }}">Users</a></li>
             <li class="hover:text-blue-300 transition duration-300 cursor-pointer"><a
                     href="{{ url_for('departament.departament') }}">Departments</a></li>
             <li class="hover:text-cyan-300 transition duration-300 cursor-pointer"><a
@@ -75,54 +74,9 @@
 
         </ul>
     </header>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="w-full max-w-lg mb-4">
-        {% for category, message in messages %}
-        <div class="p-4 text-white rounded-lg text-center 
-                              {% if category == 'error' %} bg-rose-600 
-                              {% elif category == 'success' %} bg-emerald-500 
-                              {% else %} bg-gray-700 {% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
 
-    <body class="bg-gray-900 text-white p-6">
-        <div class="container mx-auto mt-12">
-            <div class="bg-gray-800 p-6 rounded-lg mb-8 shadow-lg">
-                <h1 class="text-2xl font-bold flex items-center gap-2">
-                    <i class="fas fa-desktop"></i> PC Inventory Dashboard
-                </h1>
-                <p class="text-gray-400">Manage and monitor your PC devices inventory</p>
-            </div>
-
-            <form id="deviceForm" method="POST" action="{{ url_for('homeSoport.view_devices') }}">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-                    <!-- Formulario -->
-
-                    <input type="hidden" name="selected_category" id="selectedCategory">
-
-                    <!-- Total Devices -->
-                    <div class="bg-gray-800 p-6 rounded-lg text-center shadow-md hover:scale-105 transition-transform duration-300 cursor-pointer"
-                        onclick="submitForm('Total Devices')">
-                        <i class="fas fa-laptop text-3xl text-blue-400 mb-2"></i>
-                        <h3 class="text-xl font-bold">{{ cont_devices }}</h3>
-                        <p class="text-gray-400 text-center">Total Devices</p>
-                    </div>
-
-                </div>
-            </form>
-
-
-
-
-    </body>
-
-
-
+   
+    
 
     <script>
         document.getElementById("menu-btn").addEventListener("click", function () {
@@ -132,12 +86,6 @@
         document.getElementById("close-menu").addEventListener("click", function () {
             document.getElementById("mobile-menu").classList.add("-translate-x-full");
         });
-
-        function submitForm(category) {
-            document.getElementById("selectedCategory").value = category;
-            document.getElementById("deviceForm").submit();
-        }
-
     </script>
 </body>
 

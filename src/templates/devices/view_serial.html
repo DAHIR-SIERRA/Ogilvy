@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Dispositivo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 p-6">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Detalles del Dispositivo</h2>
+
+        {% if get_device %}
+        <table class="w-full border-collapse border border-gray-300">
+            <tbody>
+                {% for key, value in get_device.items() %}
+                <tr class="border-b border-gray-200">
+                    <td class="p-2 font-semibold text-gray-700">{{ key.replace('_', ' ') | title }}</td>
+                    <td class="p-2 text-gray-600">{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-red-500">No se encontraron datos para este serial.</p>
+        {% endif %}
+
+        <a href="{{ url_for('user.assignment') }}"
+            class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Volver</a>
+    </div>
+</body>
+
+</html>

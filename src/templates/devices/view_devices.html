@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Inventory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+
+<body class="bg-gray-900 text-white p-6 sm:p-8">
+    <div class="container mx-auto max-w-7xl">
+        <h1
+            class="text-3xl sm:text-4xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-transparent bg-clip-text mb-6">
+            Device Inventory
+        </h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="w-full max-w-lg mb-4">
+            {% for category, message in messages %}
+            <div class="p-4 text-white rounded-lg text-center 
+                              {% if category == 'error' %} bg-rose-600 
+                              {% elif category == 'success' %} bg-emerald-500 
+                              {% else %} bg-gray-700 {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 mb-6">
+            <a href="{{ url_for('homeSoport.home') }}"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md transition duration-300 text-center">
+                ← Back to Home
+            </a>
+            <input type="text" id="search-device" class="rounded-lg w-full sm:w-80 px-4 py-2 outline-none text-black"
+                placeholder="Search by Serial">
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-2">Edit Device</h2>
+            <form action="{{ url_for('edi.edith_devices') }}" method="POST"
+                class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                <input type="text" name="device_id" id="device-id"
+                    class="rounded-lg px-4 py-2 outline-none text-black w-full sm:w-60" placeholder="Enter Device ID">
+                <button type="submit"
+                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
+                    Edit
+                </button>
+            </form>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% if get_devices %}
+            {% for device in get_devices %}
+            <div
+                class="device-card bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:shadow-xl text-left">
+                {% if device.img %}
+                <img class="w-full h-40 object-cover rounded-lg mb-4"
+                    src="{{ url_for('static', filename='uploads/' + device.img.split('/')[-1]) }}" alt="Device Image">
+                {% endif %}
+                <h2 class="text-lg sm:text-xl font-semibold text-center">{{ device.brand }} - {{ device.model }}</h2>
+                <p class="device-serial text-gray-400 text-sm text-center">Serial: {{ device.device_serial }}</p>
+                <div class="mt-4 space-y-2 text-sm sm:text-base">
+                    <p><strong>ID:</strong> {{ device.id }}</p>
+                    <p><strong>State: </strong> {{ device.state }}</p>
+                    <p><strong>Active:</strong> {{ device.activo }}</p>
+                    <p><strong>Processor:</strong> {{ device.processor }}</p>
+                    <p><strong>RAM:</strong> {{ device.RAM }}</p>
+                    <p><strong>Hard Drive:</strong> {{ device.hard_disk }}</p>
+                    <p><strong>State:</strong> {{ device.state }}</p>
+                    <p><strong>Charger:</strong> {{ device.charger }}</p>
+                    <p><strong>Equipment Type:</strong> {{ device.type_equipment }}</p>
+                    <p><strong>Keyboard:</strong> {{ device.keyboard }}</p>
+                    <p><strong>Mouse:</strong> {{ device.mouse }}</p>
+                    <p><strong>Screen:</strong> {{ device.screen }}</p>
+                    <p><strong>Multi Adapter:</strong> {{ device.multi_adapter }}</p>
+                    <p><strong>Active Tablet:</strong> {{ device.active_tablet }}</p>
+                    <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-center text-gray-400 col-span-full">No devices found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("search-device");
+            const deviceCards = document.querySelectorAll(".device-card");
+
+            searchInput.addEventListener("input", function () {
+                let filter = searchInput.value.toLowerCase();
+                deviceCards.forEach(card => {
+                    let serialElement = card.querySelector(".device-serial");
+                    let serialText = serialElement ? serialElement.textContent.toLowerCase() : "";
+                    card.style.display = serialText.includes(filter) ? "block" : "none";
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

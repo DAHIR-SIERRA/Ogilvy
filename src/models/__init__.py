@@ -6,6 +6,7 @@ db = SQLAlchemy()
 from .mddevices import Device
 from .mdusers import User
 from .mddepartament import Departament
+from .mdposition import Position
 
 def init_app(app):
     db.init_app(app)

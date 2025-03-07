@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>My Users</title>
+</head>
+<body class="bg-gray-900 text-white">
+
+<header class="bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 w-full max-w-[1788px] h-[80px] flex items-center justify-between px-6 md:px-16 shadow-lg rounded-b-lg relative">
+    <button id="menu-btn" class="text-white text-4xl md:hidden focus:outline-none transition-transform transform hover:scale-110">☰</button>
+    <a href="{{ url_for('user.logout') }}" class="text-white hover:text-blue-200 transition duration-300 absolute top-5 right-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+        </svg>
+    </a>
+
+    <ul id="menu" class="hidden md:flex space-x-6 text-lg font-semibold">
+        <li class="hover:text-blue-300 transition duration-300 cursor-pointer">
+            <a href="{{ url_for('departament.departament') }}">My Device</a>
+        </li>
+    </ul>
+</header>
+
+<!-- Menú desplegable en móviles -->
+<div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-gradient-to-b from-purple-900 via-pink-800 to-orange-700 flex flex-col items-center space-y-4 py-4 shadow-2xl rounded-b-lg">
+    <a href="{{ url_for('departament.departament') }}" class="text-white text-lg font-semibold hover:text-blue-300 transition duration-300">My device</a>
+    <a href="{{ url_for('posi.position') }}" class="text-white text-lg font-semibold hover:text-cyan-300 transition duration-300">Position</a>
+    <a href="{{ url_for('user.logout') }}" class="text-white text-lg font-semibold hover:text-gray-300 transition duration-300">LogOut</a>
+</div>
+
+<main class="px-6 py-8">
+    <div class="max-w-3xl mx-auto">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="p-4 mb-4 text-center rounded-lg shadow-md text-white {% if category == 'error' %} bg-red-500 {% elif category == 'success' %} bg-green-500 {% else %} bg-gray-700 {% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-center mb-6 text-orange-400">My Users</h1>
+        <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-md">
+            <table class="table-auto w-full border-collapse border border-gray-700 text-center">
+                <thead>
+                    <tr class="bg-gray-700 text-gray-200">
+                        <th class="border border-gray-600 px-4 py-3">User</th>
+                        <th class="border border-gray-600 px-4 py-3">Full Name</th>
+                        <th class="border border-gray-600 px-4 py-3">ID Document</th>
+                        <th class="border border-gray-600 px-4 py-3">Email</th>
+                        <th class="border border-gray-600 px-4 py-3">Rol</th>
+                        <th class="border border-gray-600 px-4 py-3">Department</th>
+                        <th class="border border-gray-600 px-4 py-3">Position</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    {% for user, departament_name, position_name in get_all_keys %}
+                    <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
+                        <td class="border border-gray-600 px-4 py-3">{{ user.username }}</td>
+                        <td class="border border-gray-600 px-4 py-3">{{ user.fullname }}</td>
+                        <td class="border border-gray-600 px-4 py-3">{{ user.idDocument }}</td>
+                        <td class="border border-gray-600 px-4 py-3">{{ user.email }}</td>
+                        <td class="border border-gray-600 px-4 py-3">{{ user.rol }}</td>
+                        <td class="border border-gray-600 px-4 py-3">{{ departament_name if departament_name else "Sin Departamento" }}</td>
+                        <td class="border border-gray-600 px-4 py-3">{{ position_name if position_name else "Sin Posición" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById("menu-btn").addEventListener("click", function () {
+        document.getElementById("mobile-menu").classList.toggle("hidden");
+    });
+</script>
+
+</body>
+</html>
