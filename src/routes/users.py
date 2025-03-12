@@ -17,8 +17,8 @@ def register():
         idDocument = request.form['idDocument']
         email = request.form['email']
         rol = 'User'  # Asignar un rol por defecto
-        departament_id = request.form['departament']  # Aquí recibes el ID, no el nombre
-        position_id = request.form['position']  # Aquí recibes el ID, no el nombre
+        departament_id = request.form['departament'] 
+        position_id = request.form['position']  
 
         # Verificar si el usuario ya existe
         existing_user = User.query.filter(

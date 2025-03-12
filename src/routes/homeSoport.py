@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,session
 from flask_login import login_required, current_user
 from models.mdusers import User,db
 from models.mddepartament import Departament
@@ -22,13 +22,8 @@ def home():
      cont_not_used = Device.query.filter_by(state='Not_used').count()
      cont_assigned = Device.query.filter_by(state='Assigned').count()
             
-        
-
-
-    
-    
-    return render_template('homeSoport.html',user=current_user,
-                           cont_devices=cont_devices,
+     return render_template('homeSoport.html',user=current_user,
+                           cont_all_devices=cont_devices,
                            cont_maintenance=cont_maintenance,
                            cont_deallocated=cont_deallocated,
                            cont_assigned = cont_assigned,
@@ -62,11 +57,13 @@ def view_devices():
     if current_user.rol != "Admin":
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
-    
-    # Obtener todos los dispositivos por defecto
+
+
+
+    # Obtener todos los dispositivos
     get_devices = Device.query.all()
 
-    # Si se envía un formulario con una categoría seleccionada
+    # Filtrar por categoría si se seleccionó una
     selected_category = request.form.get("selected_category")
     if selected_category:
         if selected_category == 'Total Devices':
@@ -74,8 +71,4 @@ def view_devices():
         flash("Categoría no encontrada", "error")
         return redirect(url_for('homeSoport.view_devices'))
 
-    # Renderiza la vista con todos los dispositivos por defecto
     return render_template('devices/view_devices.html', get_devices=get_devices)
-
-
-

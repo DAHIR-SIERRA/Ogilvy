@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-gray-900 text-white p-6">
-    
+
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class="w-full max-w-lg mb-4">
@@ -58,11 +58,13 @@
 
             <!-- Features -->
             <div class="grid grid-cols-2 gap-4">
-                {% for field, label in { 'device_serial':'Serial', 'serie': 'Series', 'activo': 'Active', 'processor': 'Processor',
+                {% for field, label in { 'device_serial':'Serial', 'serie': 'Series', 'activo': 'Active', 'processor':
+                'Processor',
                 'RAM': 'RAM Memory', 'hard_disk': 'Hard Drive', 'screen': 'Screen', 'charger': 'Charger',
-                'keyboard': 'Keyboard', 'mouse': 'Mouse', 'active_tablet': 'Active Tablet', 'serial_tablet': 'Tablet Serial'
+                'keyboard': 'Keyboard', 'mouse': 'Mouse', 'active_tablet': 'Active Tablet', 'serial_tablet': 'Tablet
+                Serial'
                 }.items() %}
-                
+
                 <div>
                     <label class="block text-sm font-medium">{{ label }}</label>
                     <input type="text" name="{{ field }}" value="{{ get_device[field] if get_device[field] else '' }}"
@@ -77,7 +79,8 @@
                     <label class="block text-sm font-medium">Equipment Type</label>
                     <select name="type_equipment" class="w-full p-2 rounded bg-gray-700 text-white outline-none">
                         {% for option in ['Desktop','Laptop'] %}
-                        <option value="{{ option }}" {% if get_device.type_equipment == option %}selected{% endif %}>{{ option }}</option>
+                        <option value="{{ option }}" {% if get_device.type_equipment==option %}selected{% endif %}>{{
+                            option }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -86,8 +89,8 @@
                 <div>
                     <label class="block text-sm font-medium">{{ label }}</label>
                     <select name="{{ field }}" class="w-full p-2 rounded bg-gray-700 text-white outline-none">
-                        <option value="YES" {% if get_device[field] == 'YES' %}selected{% endif %}>YES</option>
-                        <option value="NO" {% if get_device[field] == 'NO' %}selected{% endif %}>NO</option>
+                        <option value="SI" {% if get_device[field]=='SI' %}selected{% endif %}>SI</option>
+                        <option value="NO" {% if get_device[field]=='NO' %}selected{% endif %}>NO</option>
                     </select>
                 </div>
                 {% endfor %}
@@ -100,20 +103,35 @@
                     class="w-full p-2 rounded bg-gray-700 text-white outline-none">{{ get_device.observations if get_device.observations else '' }}</textarea>
             </div>
 
-            <!-- Save Button -->
-            <div class="flex justify-end mt-6">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded shadow">Save Changes</button>
+            <!-- Buttons -->
+            <div class="flex justify-between mt-6">
+                <a href="{{ url_for('homeSoport.view_devices') }}"
+                    class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded shadow">Come Back</a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded shadow">Save
+                    Changes</button>
             </div>
         </form>
 
         {% else %}
         <!-- Error message if device is not found -->
-        <div class="text-center text-red-500 text-xl font-semibold">
-            <p>Device not found.</p>
+        <div class="flex flex-col justify-center items-center">
+            <div class="text-center text-red-500 text-xl font-semibold mb-5">
+                <p>Device not found.</p>
+            </div>
+            <a href="{{ url_for('homeSoport.view_devices') }}"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded shadow text-center w-full sm:w-auto">
+                Come Back
+            </a>
         </div>
-        {% endif %}
         
+        {% endif %}
+
     </div>
 </body>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
 
 </html>

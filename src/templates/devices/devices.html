@@ -84,7 +84,7 @@
     <main class="m-0 p-0 bg-gray-900">
         <form action="{{ url_for('devi.devices') }}" method="POST" enctype="multipart/form-data"
             class="max-w-4xl mx-auto p-6 bg-gray-800 rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 <div class="w-full max-w-lg mb-4">
