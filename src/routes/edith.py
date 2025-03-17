@@ -112,4 +112,55 @@ def update_device():
             return redirect(url_for('homeSoport.view_devices'))
 
 
+
+
     return render_template("devices/edith_devices.html")
+
+@edith_bp.route('devices/maintenance',methods=['GET','POST'])
+@login_required
+def maintenance():
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+    
+    if request.method=='POST':
+        id= request.form['id']
+        serial= request.form['serial']
+        existing_id = Device.query.filter_by(id = id).first()
+        have_owner= User.query.filter_by(device_serial= serial).first()
+        if have_owner:
+            flash("Antes de enviar este dispositivo a mantenimiento, debes desvincularlo del usuario al que está asignado","error")
+            return redirect(url_for('homeSoport.view_devices'))
+
+        if existing_id:
+            existing_id.state = 'maintenance'
+            db.session.commit()
+            flash("El dispositivo entro en mantenimiento","success")
+            return redirect(url_for('homeSoport.view_devices'))
+        else:
+            flash("No fue posdible llevar dispositivo a mantenimiento","error")
+    
+    return render_template("devices/maintenance.html")
+
+@edith_bp.route('devices/repaired',methods=['GET','POST'])
+@login_required
+def repaired():
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+    
+    if request.method=='POST':
+        id= request.form['id']
+        existing_id = Device.query.filter_by(id = id).first()
+
+        if existing_id:
+            existing_id.state = 'Repaired'
+            db.session.commit()
+            flash("El dispositivo fue reparado","success")
+            return redirect(url_for('edi.maintenance'))
+        else:
+            flash("Dispositivo no dado de alta","error")
+    
+    return render_template("devices/maintenance.html")
+
+

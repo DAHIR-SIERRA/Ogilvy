@@ -16,18 +16,15 @@ def home():
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
     else:
-     cont_devices= Device.query.count()
+     cont_devices= Device.query.filter(Device.state !='maintenance').count()
      cont_maintenance = Device.query.filter_by(state ='maintenance').count()
-     cont_deallocated = Device.query.filter_by(state='deallocated').count()
-     cont_not_used = Device.query.filter_by(state='Not_used').count()
-     cont_assigned = Device.query.filter_by(state='Assigned').count()
+     cont_users = User.query.count()
+
             
      return render_template('homeSoport.html',user=current_user,
                            cont_all_devices=cont_devices,
                            cont_maintenance=cont_maintenance,
-                           cont_deallocated=cont_deallocated,
-                           cont_assigned = cont_assigned,
-                           cont_not_used=cont_not_used)
+                           cont_users=cont_users)
 
 
 
@@ -57,18 +54,42 @@ def view_devices():
     if current_user.rol != "Admin":
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
-
-
+    
+    cont_devices= Device.query.filter(Device.state !='maintenance').count()
+    cont_maintenance = Device.query.filter_by(state ='maintenance').count()
+    cont_users = User.query.count()
 
     # Obtener todos los dispositivos
-    get_devices = Device.query.all()
+    get_devices = Device.query.filter(Device.state != 'maintenance').all()
+    get_maintenance =Device.query.filter_by(state='maintenance').all()
+
 
     # Filtrar por categoría si se seleccionó una
     selected_category = request.form.get("selected_category")
     if selected_category:
         if selected_category == 'Total Devices':
+            redirect(url_for('homeSoport.view_devices'))
             return render_template('devices/view_devices.html', get_devices=get_devices)
-        flash("Categoría no encontrada", "error")
-        return redirect(url_for('homeSoport.view_devices'))
+            
+        
+        if selected_category == 'Maintenance':
+            redirect(url_for('edi.maintenance'))
+            return render_template('devices/maintenance.html', get_maintenance=get_maintenance)
+        
+        if selected_category == 'Users':
+            redirect(url_for('user.verify_edith'))
+            return render_template('verify_code.html')
+        
+        if selected_category =='Export':
+            redirect(url_for('export.export_page'))
+            return render_template('export.html')
+        
 
-    return render_template('devices/view_devices.html', get_devices=get_devices)
+        
+    
+        
+
+    return render_template('homeSoport.html', get_devices=get_devices,
+                           cont_all_devices=cont_devices,
+                           cont_maintenance=cont_maintenance,
+                           cont_users = cont_users)

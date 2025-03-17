@@ -4,6 +4,9 @@ from .homeSoport import hsoprt_bp
 from .devices import devices_bp
 from .position import position_bp
 from .edith import edith_bp
+from .assignment import assignment_bp
+from .exportDevices import export_bp
+from .importDevices import import_bp
 
 def init_app(app):
     app.register_blueprint(users_bp, url_prefix='/user')
@@ -12,4 +15,8 @@ def init_app(app):
     app.register_blueprint(position_bp,url_prefix='/posi')
     app.register_blueprint(devices_bp,url_prefix='/devi')
     app.register_blueprint(edith_bp,url_prefix='/edi')
+    app.register_blueprint(assignment_bp,url_prefix='/add')
+    app.register_blueprint(export_bp,url_prefix='/exp')
+    app.register_blueprint(import_bp,url_prefix='/imp')
+
     

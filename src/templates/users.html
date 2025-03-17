@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen px-4">
+    
+    <div class="w-full max-w-lg">
+        <!-- Contenedor de mensajes flash -->
+        <div id="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="p-4 mb-4 text-center rounded-lg shadow-md text-white 
+                    {% if category == 'error' %} bg-red-500 
+                    {% elif category == 'success' %} bg-green-500 
+                    {% else %} bg-gray-700 {% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Formulario de edición -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-center mb-4">Edit User</h2>
+
+            <form action="{{ url_for('user.users') }}" method="POST" class="space-y-4">
+                <input type="hidden" name="id" value="{{ user.id }}">
+
+                <div>
+                    <label class="block text-sm font-medium">Username</label>
+                    <input type="text" name="username" value="{{ user.username }}" required 
+                        class="w-full bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium">Full Name</label>
+                    <input type="text" name="fullname" value="{{ user.fullname }}" required 
+                        class="w-full bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium">ID Document</label>
+                    <input type="text" name="idDocument" value="{{ user.idDocument }}" required 
+                        class="w-full bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium">Role</label>
+                    <select name="rol" required 
+                        class="w-full bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Admin" {% if user.rol == "Admin" %}selected{% endif %}>Admin</option>
+                        <option value="User" {% if user.rol == "User" %}selected{% endif %}>User</option>
+                    </select>
+                </div>
+
+                <!-- Departamento -->
+                <div>
+                    <label class="block text-sm font-medium">Department</label>
+                    <select name="departament_id" required
+                        class="w-full bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" {% if not user.departament_id %}selected{% endif %}>Select a department</option>
+                        {% for register in departaments %}
+                            <option value="{{ register.id }}" {% if user.departament_id == register.id %}selected{% endif %}>
+                                {{ register.named }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Posición -->
+                <div>
+                    <label class="block text-sm font-medium">Position</label>
+                    <select name="position_id" required
+                        class="w-full bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" {% if not user.position_id %}selected{% endif %}>Select a position</option>
+                        {% for register in carposition %}
+                            <option value="{{ register.id }}" {% if user.position_id == register.id %}selected{% endif %}>
+                                {{ register.namep }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mt-4 flex justify-between">
+                    <a href="{{ url_for('user.verify_edith') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">Cancel</a>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script para borrar los mensajes flash automáticamente -->
+    <script>
+        setTimeout(() => {
+            const flashMessages = document.getElementById("flash-messages");
+            if (flashMessages) {
+                flashMessages.style.transition = "opacity 0.5s";
+                flashMessages.style.opacity = "0";
+                setTimeout(() => flashMessages.remove(), 500);
+            }
+        }, 3000); // Desaparece después de 3 segundos
+    </script>
+
+</body>
+</html>

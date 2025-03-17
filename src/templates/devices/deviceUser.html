@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-6">
+
+    {% if my_devices %}
+    <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-3xl w-full">
+        {% for device in my_devices %}
+        <div class="flex justify-center mb-6">
+            <img class="w-48 h-48 object-cover rounded-lg border-2 border-gray-700"
+                src="{{ url_for('static', filename='uploads/' + device.img.split('/')[-1]) }}" alt="Device Image">
+        </div>
+
+        <h1 class="text-3xl font-bold text-center mb-4">{{ device.brand }} - {{ device.model }}</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
+            <p><strong>Serial:</strong> {{ device.device_serial }}</p>
+            <p><strong>Asset:</strong> {{ device.activo }}</p>
+            <p><strong>Series:</strong> {{ device.serie }}</p>
+            <p><strong>Processor:</strong> {{ device.processor }}</p>
+            <p><strong>RAM:</strong> {{ device.RAM }}</p>
+            <p><strong>Hard Disk:</strong> {{ device.hard_disk }}</p>
+            <p><strong>Equipment Type:</strong> {{ device.type_equipment }}</p>
+            <p><strong>Keyboard:</strong> {{ device.keyboard }}</p>
+            <p><strong>Mouse:</strong> {{ device.mouse }}</p>
+            <p><strong>Screen:</strong> {{ device.screen }}</p>
+            <p><strong>Status:</strong> <span class="text-green-400">{{ device.state }}</span></p>
+        </div>
+
+        <div class="mt-4 text-gray-400">
+            <p><strong>Observations:</strong> {{ device.observations }}</p>
+        </div>
+        <div class="mt-8">
+            <a href="{{url_for ('homeSoport.homeUser')}}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Come Back Home
+            </a>
+        </div>
+    </div>
+
+
+    {% endfor %}
+    {% else %}
+    <div class="text-center">
+        <p class="text-xl text-gray-400 mb-4">Device not found</p>
+        <a href="{{url_for ('homeSoport.homeUser')}}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Come Back Home
+        </a>
+    </div>
+    {% endif %}
+
+</body>
+
+</html>

@@ -1,35 +1,72 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Dispositivo</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Device Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 p-6">
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Device Details</h2>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-6">
 
-        {% if get_device %}
-        <table class="w-full border-collapse border border-gray-300">
-            <tbody>
-                {% for key, value in get_device.items() %}
-                <tr class="border-b border-gray-200">
-                    <td class="p-2 font-semibold text-gray-700">{{ key.replace('_', ' ') | title }}</td>
-                    <td class="p-2 text-gray-600">{{ value }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p class="text-red-500">No se encontraron datos para este serial.</p>
-        {% endif %}
-
-        <a href="{{ url_for('user.assignment') }}"
-            class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Volver</a>
+    {% if get_device %}
+    <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-3xl w-full">
+        <div class="flex justify-center mb-6">
+            <img class="w-48 h-48 object-cover rounded-lg border-2 border-gray-700"
+                src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}" alt="Device Image">
+        </div>
+    
+        <h1 class="text-3xl font-bold text-center mb-6">{{ get_device.brand }} - {{ get_device.model }}</h1>
+    
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
+            <div>
+                <p><strong>Serial:</strong> {{ get_device.device_serial }}</p>
+                <p><strong>Asset:</strong> {{ get_device.activo }}</p>
+                <p><strong>Charger:</strong> {{ get_device.charger }}</p>
+                <p><strong>Series:</strong> {{ get_device.serie }}</p>
+                <p><strong>Processor:</strong> {{ get_device.processor }}</p>
+                <p><strong>RAM:</strong> {{ get_device.RAM }}</p>
+                <p><strong>Hard Disk:</strong> {{ get_device.hard_disk }}</p>
+            </div>
+            
+            <div>
+                <p><strong>Equipment Type:</strong> {{ get_device.type_equipment }}</p>
+                <p><strong>Keyboard:</strong> {{ get_device.keyboard }}</p>
+                <p><strong>Mouse:</strong> {{ get_device.mouse }}</p>
+                <p><strong>Screen:</strong> {{ get_device.screen }}</p>
+                <p><strong>Multi Adapter:</strong> {{ get_device.multi_adapter }}</p>
+                <p><strong>Old Owner:</strong> {{ get_device.old_owner }}</p>
+                <p><strong>Base:</strong> {{ get_device.base }}</p>
+            </div>
+        </div>
+    
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300 mt-6">
+            <p><strong>Active Tablet:</strong> {{ get_device.active_tablet }}</p>
+            <p><strong>Serial Tablet:</strong> {{ get_device.serial_tablet }}</p>
+            <p><strong>Status:</strong> <span class="text-green-400">{{ get_device.state }}</span></p>
+        </div>
+    
+        <div class="mt-4 text-gray-400">
+            <p><strong>Observations:</strong> {{ get_device.observations }}</p>
+        </div>
+    
+        <div class="mt-8 text-center">
+            <a href="{{ url_for('add.assignment') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+                Come Back
+            </a>
+        </div>
     </div>
+    
+    {% else %}
+    <div class="text-center">
+        <p class="text-xl text-gray-400 mb-4">Device not found</p>
+        <a href="{{ url_for('add.assignment') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Come Back 
+        </a>
+    </div>
+    {% endif %}
+
 </body>
 
 </html>

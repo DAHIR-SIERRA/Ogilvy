@@ -42,7 +42,7 @@
                 class="text-white text-lg font-semibold hover:text-blue-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
                 Devices
             </a>
-            <a href="{{ url_for('user.assignment') }}"
+            <a href="{{ url_for('add.assignment') }}"
                 class="text-white text-lg font-semibold hover:text-green-300 transition duration-300 w-full text-center py-3 border-b border-gray-600 ">
                 Assignment
             </a>
@@ -67,7 +67,7 @@
             <li class="hover:text-yellow-300 transition duration-300 cursor-pointer"><a
                     href="{{ url_for('devi.devices') }}">Devices</a></li>
             <li class="hover:text-green-300 transition duration-300 cursor-pointer"><a
-                    href="{{ url_for('user.assignment') }}">Assignment</a></li>
+                    href="{{ url_for('add.assignment') }}">Assignment</a></li>
             <li class="hover:text-blue-300 transition duration-300 cursor-pointer"><a
                     href="{{ url_for('departament.departament') }}">Departments</a></li>
             <li class="hover:text-cyan-300 transition duration-300 cursor-pointer"><a
@@ -110,7 +110,27 @@
                         onclick="submitForm('Total Devices')">
                         <i class="fas fa-laptop text-3xl text-blue-400 mb-2"></i>
                         <h3 class="text-xl font-bold">{{ cont_all_devices }}</h3>
-                        <p class="text-gray-400 text-center">Total Devices</p>
+                        <p class="text-gray-400 text-center">Available devices</p>
+                    </div>
+                    <!-- Total maintenance -->
+                    <div class="bg-gray-800 p-6 rounded-lg text-center shadow-md hover:scale-105 transition-transform duration-300 cursor-pointer"
+                        onclick="submitForm('Maintenance')">
+                        <i class="fa-solid fa-screwdriver-wrench text-red-400 text-3xl"></i>
+                        <h3 class="text-xl font-bold">{{ cont_maintenance }}</h3>
+                        <p class="text-gray-400 text-center">Maintenance</p>
+                    </div>
+                    <!-- Total Users -->
+                    <div class="bg-gray-800 p-6 rounded-lg text-center shadow-md hover:scale-105 transition-transform duration-300 cursor-pointer"
+                        onclick="submitForm('Users')">
+                        <i class="fa-solid fa-users text-xl text-green-400"></i>
+                        <h3 class="text-xl font-bold">{{ cont_users }}</h3>
+                        <p class="text-gray-400 text-center">Users</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg text-center shadow-md hover:scale-105 transition-transform duration-300 cursor-pointer"
+                        onclick="submitForm('Export')">
+                        <i class="fa-solid fa-download text-xl text-yellow-400"></i>
+                        <h3 class="text-xl font-bold">{{ cont_users }}</h3>
+                        <p class="text-gray-400 text-center">Export</p>
                     </div>
 
                 </div>

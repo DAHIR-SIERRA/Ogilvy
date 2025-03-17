@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export & Import Devices</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+
+    <div class="bg-gray-800 text-white p-8 rounded-lg shadow-lg w-full max-w-lg text-center">
+        <h1 class="text-3xl font-bold mb-4">Export & Import Devices</h1>
+
+        <!-- Export Section -->
+        <div class="mb-6">
+            <p class="text-gray-400 mb-4">Click the button below to download the list of devices in Excel format.</p>
+            <a href="{{ url_for('export.ajax_export') }}" 
+               class="bg-blue-600 hover:bg-blue-700 transition-colors text-white font-bold py-2 px-6 rounded-lg shadow-md">
+                Download Excel
+            </a>
+        </div>
+
+        <hr class="border-gray-600 my-6">
+
+        <!-- Import Section -->
+        <div class="mb-4">
+            <p class="text-gray-400 mb-4">Upload an Excel file to import devices into the database.</p>
+            <form action="{{ url_for('imp.import_excel') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <input type="file" name="file" accept=".xls,.xlsx" required 
+                       class="block w-full text-sm text-gray-300 
+                              file:mr-4 file:py-2 file:px-4 
+                              file:rounded-lg file:border-0 
+                              file:text-sm file:font-semibold 
+                              file:bg-blue-500 file:text-white 
+                              hover:file:bg-blue-600 cursor-pointer">
+
+                <button type="submit" 
+                        class="w-full bg-green-600 hover:bg-green-700 transition-colors text-white font-bold py-2 px-6 rounded-lg shadow-md">
+                    Import Excel
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

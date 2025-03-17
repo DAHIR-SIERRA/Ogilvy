@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Edit Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-900 px-4">
+    <div class="max-w-3xl w-full" id="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="relative flex items-center justify-between p-3 mb-3 rounded-md text-sm shadow-md transition-opacity duration-300 ease-in-out 
+            {% if category == 'error' %} bg-red-600 text-white {% elif category == 'success' %} bg-green-600 text-white {% else %} bg-gray-700 text-gray-300 {% endif %}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.style.display='none'" class="text-white text-lg opacity-50 hover:opacity-100 focus:outline-none">
+                &times;
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    
+    <!-- Contenedor principal -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-80 text-center">
+        <h2 class="text-white text-xl font-semibold mb-4">Enter Edit Code</h2>
+
+        <!-- Formulario -->
+        <form action="{{ url_for('user.verify_edith') }}" method="POST">
+            <label for="editCode" class="block text-gray-400 text-sm mb-2">User Edit Code</label>
+            <input type="text" id="code_edith" name="code_edith" 
+                class="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                required>
+            <button type="submit" 
+                class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition">
+                Submit
+            </button>
+        </form>
+
+        <!-- Botón para volver a Home -->
+        <a href="{{ url_for('homeSoport.home') }}" 
+            class="w-full mt-4 block bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-md transition text-center">
+            Back to Home
+        </a>
+    </div>
+
+    <!-- Contenedor de mensajes flash -->
+
+
+</body>
+<script>
+    setTimeout(() => {
+        const flashMessages = document.getElementById("flash-messages");
+        if (flashMessages) {
+            flashMessages.style.transition = "opacity 0.5s";
+            flashMessages.style.opacity = "0";
+            setTimeout(() => flashMessages.remove(), 500);
+        }
+    }, 3000); // Desaparece después de 3 segundos
+    if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+</script>
+</html>

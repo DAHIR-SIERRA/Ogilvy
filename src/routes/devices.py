@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint
 from models import Device, db
+from models import User
 from flask_login import login_required, current_user
 import os
 import uuid  # Para generar nombres únicos en las imágenes
@@ -96,3 +97,16 @@ def devices():
         return redirect(url_for('devi.devices'))
 
     return render_template('devices/devices.html')
+
+@devices_bp.route('/deviceUser', methods=['GET', 'POST'])
+@login_required
+def deviceUser():
+    if current_user.rol != "User":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.home'))
+    
+    # Consulta los dispositivos asociados al usuario actual
+    my_devices = db.session.query(Device).join(User, Device.device_serial == User.device_serial).filter(User.id == current_user.id).all()
+
+    return render_template('devices/deviceUser.html', my_devices=my_devices)
+

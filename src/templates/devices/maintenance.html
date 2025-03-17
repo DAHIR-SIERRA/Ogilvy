@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Inventory</title>
+    <title>Device maintenance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </head>
@@ -13,7 +13,7 @@
     <div class="container mx-auto max-w-7xl">
         <h1
             class="text-3xl sm:text-4xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-transparent bg-clip-text mb-6">
-            Device Inventory
+            Devices in Maintenance
         </h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -38,25 +38,12 @@
                 placeholder="Search by Serial">
         </div>
 
-        <div class="mb-6">
-            <h2 class="text-lg font-semibold mb-2">Edit Device</h2>
-            <form action="{{ url_for('edi.edith_devices') }}" method="POST" autocomplete="off"
-                class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                <input type="text" name="device_id" id="device-id"
-                    class="rounded-lg px-4 py-2 outline-none text-black w-full sm:w-60" placeholder="Enter Device ID">
-                <button type="submit"
-                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition duration-300">
-                    Edit
-                </button>
-            </form>
-        </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {% if get_devices %}
-            {% for device in get_devices %}
+            {% if get_maintenance %}
+            {% for device in get_maintenance %}
             <div
                 class="device-card bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:shadow-xl text-left">
-                <form action="{{ url_for('edi.maintenance') }}" method="POST">
+                <form action="{{ url_for('edi.repaired') }}" method="POST">
                     {% if device.img %}
                     <img class="w-full h-40 object-cover rounded-lg mb-4"
                         src="{{ url_for('static', filename='uploads/' + device.img.split('/')[-1]) }}"
@@ -64,12 +51,9 @@
                     {% endif %}
                     <h2 class="text-lg sm:text-xl font-semibold text-center">{{ device.brand }} - {{ device.model }}
                     </h2>
-
+                    <p class="device-serial text-gray-400 text-sm text-center">Serial: {{ device.device_serial }}</p>
                     <div class="mt-4 space-y-2 text-sm sm:text-base">
-                        <p>ID: <input type="text" value="{{ device.id }}" readonly name="id"
-                                class="outline-none bg-[#ffffff00] text-[#FFD700] text-blue-200"></p>
-                        <p>Serial: <input type="text" value="{{ device.device_serial }}" readonly name="serial"
-                                class="outline-none bg-[#ffffff00] text-blue-200"></p>
+                        <p>ID  <input type="text" value="{{ device.id }}" readonly name="id" class="outline-none bg-[#ffffff00]" ></p>
                         <p><strong>State: </strong> {{ device.state }}</p>
                         <p><strong>Active:</strong> {{ device.activo }}</p>
                         <p><strong>Processor:</strong> {{ device.processor }}</p>
@@ -85,8 +69,8 @@
                         <p><strong>Active Tablet:</strong> {{ device.active_tablet }}</p>
                         <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>
                     </div>
-                    <button type="submit" class="bg-red-600 hover:bg-red-700 p-2 rounded-lg text-white">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 p-2 rounded-lg text-white">
+                        <i class="fa-solid fa-thumbs-up"></i>
                     </button>
                 </form>
             </div>
@@ -104,16 +88,13 @@
 
             searchInput.addEventListener("input", function () {
                 let filter = searchInput.value.toLowerCase();
-
                 deviceCards.forEach(card => {
-                    let serialInput = card.querySelector("input[name='serial']");
-                    let serialText = serialInput ? serialInput.value.toLowerCase() : "";
-
+                    let serialElement = card.querySelector(".device-serial");
+                    let serialText = serialElement ? serialElement.textContent.toLowerCase() : "";
                     card.style.display = serialText.includes(filter) ? "block" : "none";
                 });
             });
         });
-
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }

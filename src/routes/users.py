@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from models.mdusers import db, User
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
+from flask import session
 from models.mddepartament import Departament
 from models.mdposition import Position
 from models.mddevices import Device
@@ -92,12 +93,15 @@ def login():
 
     return render_template("auth/login.html")
 
+
 @users_bp.route('/logout')
 @login_required
 def logout():
-    logout_user()
+    logout_user()  # Cierra la sesión con Flask-Login
+    session.clear()  # Borra toda la información de la sesión
     flash("Sesión cerrada exitosamente", "success")
     return redirect(url_for('user.login'))
+
 
 @users_bp.route('/home')
 @login_required
@@ -105,136 +109,77 @@ def home():
     return render_template("homeSoport.html", user=current_user)
 
 
-@users_bp.route('/assignment', methods=['GET', 'POST'])
+    
+@users_bp.route('/verify_edith', methods=['GET', 'POST'])
 @login_required
-def assignment():
+def verify_edith():
     if current_user.rol != "Admin":
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
     
     if request.method == 'POST':
-        action = request.form.get('action')
-        id_document = request.form.get('idDocument')
-        observations = request.form.get('observations', '')
+        code_edith = request.form.get('code_edith')  # Usa .get() para evitar errores si no existe
+        user = User.query.filter_by(code_edith=code_edith).first()  # Asegura que solo devuelve un usuario
 
-        user = User.query.filter_by(idDocument=id_document).first()
-        if not user:
-            flash("Error: Usuario no encontrado.", "error")
-            return redirect(url_for('user.assignment'))
+        if user:
+            departaments = Departament.query.all()
+            carposition = Position.query.all()
+            flash("Usuario encontrado", "success")
+            return render_template('users.html', user=user, departaments=departaments, carposition=carposition)  # Pasar el usuario encontrado a la plantilla
+        else:
+            flash("Usuario no ha sido encontrado o el código ha sido desactivado", "error")
 
-        if action == "assign":
-            rol = request.form['rol']
-            serial = request.form.get('serial', None)
-            state = 'Assigned'
+    return render_template('verify_code.html')  # Siempre renderiza la página en GET
 
-            if user.rol != rol:
-                user.rol = rol
-                db.session.commit()
-                flash("Rol actualizado correctamente", "success")
-                return redirect(url_for('user.assignment'))
-
-            if serial:
-                device = Device.query.filter_by(device_serial=serial).first()
-                
-                if not device:
-                    flash("Error: El dispositivo seleccionado no existe.", "error")
-                    return redirect(url_for('user.assignment'))
-
-                if observations:
-                    device.observations = observations
-                    db.session.commit()
-                    flash("Observación registrada", "success")
-
-                if device.state not in ["Not_used", "Deallocated"]:
-                    return redirect(url_for('user.assignment'))
-
-                user.device_serial = serial
-                device.state = state
-                device.observations = observations
-
-            db.session.commit()
-            flash("Asignación realizada correctamente.", "success")
-
-        elif action == "delete":
-            if user.device_serial:
-                device = Device.query.filter_by(device_serial=user.device_serial).first()
-                if device:
-                    device.state = "Deallocated"
-                    device.observations = observations
-
-                user.device_serial = None
-
-            db.session.commit()
-            flash("Desasignación realizada correctamente", "success")
-
-        return redirect(url_for('user.assignment'))
-
-    # 🔹 **Consulta mejorada para obtener el nombre del departamento y la posición**
-    get_keys = (
-        db.session.query(User, Departament.named, Position.namep)
-        .outerjoin(Departament, User.departament_id == Departament.id)
-        .outerjoin(Position, User.position_id == Position.id)
-        .all()
-    )
-
-    get_users = User.query.all()
-    get_serials = Device.query.filter(Device.state.in_(["Not_used", "Deallocated"])).all()
-
-    get_serials = Device.query.filter(Device.state.in_(["Not_used", "Deallocated"])).all()
-    
-    return render_template('assignment.html', get_key=get_keys, get_all_serials=get_serials,get_all_users=get_users)
-
-
-
-
-@users_bp.route('/view_serial', methods=['GET', 'POST'])
-@login_required
-def view_serial():
+         
+@users_bp.route('/users', methods=['GET', 'POST'])
+def users():
     if current_user.rol != "Admin":
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
-    
-    if request.method== 'POST':
-        serial= request.form['serial']
-
-        if not serial or serial == 'None':
-            flash("Error este Usuario no tiene asignado un dispositivo","error")
-            return redirect(url_for('user.assignment'))
-        
-        existing_device= Device.query.filter_by(device_serial=serial).first()
-
-        if not existing_device:
-            flash("error este serial no existe en la base","error")
-            return redirect(url_for('user.assignment'))
-            
-        
-        get_device= {
-            "id": existing_device.id,
-            "brand":existing_device.brand,
-            "charger":existing_device.charger,
-            "device_serial": existing_device.device_serial,
-            "model":existing_device.model,
-            "activo":existing_device.activo,
-            "serie": existing_device.serie,
-            "processor": existing_device.processor,
-            "RAM": existing_device.RAM,
-            "hard_disk":existing_device.hard_disk,
-            "type_equipment":existing_device.type_equipment,
-            "keyboard":existing_device.keyboard,
-            "mouse":existing_device.mouse,
-            "active_tablet":existing_device.active_tablet,
-            "serial_tablet":existing_device.serial_tablet,
-            "base":existing_device.base,
-            "multi_adapter":existing_device.multi_adapter,
-            "screen": existing_device.screen,
-            "observations":existing_device.observations,
-            "state":existing_device.state
-            }
 
 
-        return render_template("devices/view_serial.html", get_device=get_device)
-    
-    return render_template("devices/view_serial.html")
+    if request.method == 'POST':
+        user_id = request.form.get("id")
+        username = request.form.get("username")
+        fullname = request.form.get("fullname")
+        id_document = request.form.get("idDocument")
+        role = request.form.get("rol")
+        departament_id = request.form.get("departament_id")
+        position_id = request.form.get("position_id")
+
+        # Buscar usuario en la base de datos
+        user = User.query.get(user_id)
+        if not user:
+            flash("Usuario no encontrado", "error")
+            return redirect(url_for("user.verify_edith"))
+
+        # Actualizar datos del usuario
+        user.username = username
+        user.fullname = fullname
+        user.idDocument = id_document
+        user.rol = role
+        user.departament_id = departament_id
+        user.position_id = position_id
+
+        # Guardar cambios en la base de datos
+        try:
+            db.session.commit()
+            flash("Usuario actualizado correctamente", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error al actualizar usuario: {str(e)}", "error")
+
+        return redirect(url_for("user.verify_edith"))
+
+    return render_template("users.html")
+
+         
+
+         
+
+
+
 
        
         
