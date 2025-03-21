@@ -40,7 +40,7 @@ def assignment():
 
                 if not device:
                     flash("Error: El dispositivo seleccionado no existe.", "error")
-                elif device.state not in ["Not_used", "Deallocated", "Repaired"]:
+                elif device.state not in ["Not_Used", "Deallocated", "Repaired"]:
                     flash("Error: El dispositivo no está disponible para asignación.", "error")
                 else:
                     user.device_serial = serial
@@ -70,7 +70,7 @@ def assignment():
     )
 
     get_users = User.query.all()
-    get_serials = Device.query.filter(Device.state.in_(["Not_used", "Deallocated", "Repaired"])).all()
+    get_serials = Device.query.filter(Device.state.in_(["Not_Used", "Deallocated", "Repaired"])).all()
 
     return render_template('assignment.html', get_key=get_keys, get_all_serials=get_serials, get_all_users=get_users)
 

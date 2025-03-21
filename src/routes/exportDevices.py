@@ -1,16 +1,26 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, Response
 from models.mddevices import db, Device
+from flask_login import login_required, current_user
 import xlwt
 import io
 
 export_bp = Blueprint('export', __name__)
 
 @export_bp.route('/export_page')
+@login_required
 def export_page():
-    return render_template('export.html')
+     if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+     return render_template('export.html')
 
 @export_bp.route('/ajax_export', methods=['GET'])
+@login_required
 def ajax_export():
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+    
     # Crear libro de Excel
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('devices')

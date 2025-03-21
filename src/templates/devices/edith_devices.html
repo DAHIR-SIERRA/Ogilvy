@@ -32,7 +32,7 @@
 
         {% if get_device %}
         <!-- Edit Form -->
-        <form action="{{ url_for('edi.update_device') }}" method="POST" class="space-y-4">
+        <form action="{{ url_for('edi.update_device') }}" method="POST"  enctype="multipart/form-data" class="space-y-4">
             <input type="hidden" name="id" value="{{ get_device.id }}">
 
             <!-- ID -->
@@ -102,6 +102,13 @@
                 <textarea name="observations" rows="3"
                     class="w-full p-2 rounded bg-gray-700 text-white outline-none">{{ get_device.observations if get_device.observations else '' }}</textarea>
             </div>
+            <div class="flex flex-col items-center">
+                <label class="block text-sm font-medium">Photo</label>
+                <input type="file" name="img" id="img" accept="image/*"
+                    class="w-full p-2 rounded bg-gray-700 text-white outline-none mb-4">
+                <img id="preview" src="{{ get_device.img }}" class="w-40 h-40 object-cover rounded-lg shadow-md border border-gray-600" alt="Preview">
+            </div>
+            
 
             <!-- Buttons -->
             <div class="flex justify-between mt-6">
@@ -110,6 +117,7 @@
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded shadow">Save
                     Changes</button>
             </div>
+           
         </form>
 
         {% else %}
@@ -132,6 +140,19 @@
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
+    
+    document.getElementById('img').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+
 </script>
 
 </html>

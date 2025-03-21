@@ -44,13 +44,11 @@ def devices():
         base = request.form['base']
         multi_adapter = request.form['multi_adapter']
         screen = request.form['screen']
-        state = 'Not_used'
+        state = 'Not_Used'
         observations = request.form['observations']
 
         # Verificar si ya existe un dispositivo con datos únicos
         if Device.query.filter_by(device_serial=device_serial).first() or \
-           Device.query.filter_by(activo=activo).first() or \
-           Device.query.filter_by(screen=screen).first() or \
            Device.query.filter_by(serie=serie).first():
             flash("Este dispositivo ya existe", "error")
             return redirect(url_for('devi.devices'))

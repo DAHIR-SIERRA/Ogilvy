@@ -13,8 +13,11 @@
     {% if get_device %}
     <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-3xl w-full">
         <div class="flex justify-center mb-6">
-            <img class="w-48 h-48 object-cover rounded-lg border-2 border-gray-700"
-                src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}" alt="Device Image">
+            {% if get_device and get_device.img %}
+            <img src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}" alt="Device Image">
+            {% else %}
+            <p class="text-white">No image available</p>
+            {% endif %}
         </div>
     
         <h1 class="text-3xl font-bold text-center mb-6">{{ get_device.brand }} - {{ get_device.model }}</h1>
