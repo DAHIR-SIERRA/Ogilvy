@@ -32,7 +32,7 @@ def ajax_export():
 
     # Encabezados del Excel (coincidiendo con los nombres esperados en la importación)
     columns = [
-        'id', 'brand', 'charger', 'device_serial', 'model', 'activo', 'serie',
+        'id', 'brand', 'charger', 'device_serial', 'model', 'activo',
         'processor', 'RAM', 'hard_disk', 'type_equipment', 'keyboard', 'mouse',
         'active_tablet', 'serial_tablet', 'base', 'multi_adapter', 'screen',
         'state','old_onwer','img','observations'
@@ -53,22 +53,21 @@ def ajax_export():
         ws.write(row_num, 3, dev.device_serial or '')
         ws.write(row_num, 4, dev.model or '')
         ws.write(row_num, 5, dev.activo or '')
-        ws.write(row_num, 6, dev.serie or '')
-        ws.write(row_num, 7, dev.processor or '')
-        ws.write(row_num, 8, dev.RAM or '')
-        ws.write(row_num, 9, dev.hard_disk or '')
-        ws.write(row_num, 10, dev.type_equipment or '')
-        ws.write(row_num, 11, dev.keyboard or '')
-        ws.write(row_num, 12, dev.mouse or '')
-        ws.write(row_num, 13, dev.active_tablet or '')
-        ws.write(row_num, 14, dev.serial_tablet or '')
-        ws.write(row_num, 15, dev.base or '')
-        ws.write(row_num, 16, dev.multi_adapter or '')
-        ws.write(row_num, 17, dev.screen or '')
-        ws.write(row_num, 18, dev.state or '')
-        ws.write(row_num, 19, dev.old_onwer or '')
-        ws.write(row_num, 20, dev.img or '')
-        ws.write(row_num, 21, dev.observations or '')
+        ws.write(row_num, 6, dev.processor or '')
+        ws.write(row_num, 7, dev.RAM or '')
+        ws.write(row_num, 8, dev.hard_disk or '')
+        ws.write(row_num, 9, dev.type_equipment or '')
+        ws.write(row_num, 10, dev.keyboard or '')
+        ws.write(row_num, 11, dev.mouse or '')
+        ws.write(row_num, 12, dev.active_tablet or '')
+        ws.write(row_num, 13, dev.serial_tablet or '')
+        ws.write(row_num, 14, dev.base or '')
+        ws.write(row_num, 15, dev.multi_adapter or '')
+        ws.write(row_num, 16, dev.screen or '')
+        ws.write(row_num, 17, dev.state or '')
+        ws.write(row_num, 18, dev.old_onwer or '')
+        ws.write(row_num, 19, dev.img or '')
+        ws.write(row_num, 20, dev.observations or '')
 
     # Guardar en la salida
     wb.save(output)

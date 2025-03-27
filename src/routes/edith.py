@@ -50,7 +50,6 @@ def edith_devices():
             "device_serial": device.device_serial,
             "model": device.model,
             "activo": device.activo,
-            "serie": device.serie,
             "processor": device.processor,
             "RAM": device.RAM,
             "hard_disk": device.hard_disk,
@@ -65,6 +64,7 @@ def edith_devices():
             "observations": device.observations,
             "state": device.state
         }
+        
 
         return render_template("devices/edith_devices.html", get_device=get_device)
 
@@ -82,12 +82,11 @@ def update_device():
 
     # Obtener datos del formulario usando request.form[]
     id = request.form['id']
-    device_serial = request.form['device_serial']
+
     brand = request.form['brand']
     charger = request.form['charger']
     model = request.form['model']
     activo = request.form['activo']
-    serie = request.form['serie']
     processor = request.form['processor']
     ram = request.form['RAM']
     hard_disk = request.form['hard_disk']
@@ -122,9 +121,7 @@ def update_device():
     device_v.brand = brand
     device_v.charger = charger
     device_v.model = model
-    device_v.device_serial = device_serial
     device_v.activo = activo
-    device_v.serie = serie
     device_v.processor = processor
     device_v.RAM = ram
     device_v.hard_disk = hard_disk
@@ -142,10 +139,13 @@ def update_device():
     # Guardar los cambios en la base de datos
     db.session.commit()
 
+    get_devices = Device.query.all()
+
+
     flash("Dispositivo actualizado correctamente", "success")
-    return redirect(url_for('homeSoport.view_devices'))
+    return render_template('devices/view_devices.html',get_devices = get_devices)
 
-
+    
 @edith_bp.route('devices/maintenance',methods=['GET','POST'])
 @login_required
 def maintenance():
@@ -160,13 +160,13 @@ def maintenance():
         have_owner= User.query.filter_by(device_serial= serial).first()
         if have_owner:
             flash("Antes de enviar este dispositivo a mantenimiento, debes desvincularlo del usuario al que está asignado","error")
-            return redirect(url_for('homeSoport.view_devices'))
+            return redirect(url_for('devi.view_devices'))
 
         if existing_id:
             existing_id.state = 'maintenance'
             db.session.commit()
             flash("El dispositivo entro en mantenimiento","success")
-            return redirect(url_for('homeSoport.view_devices'))
+            return redirect(url_for('devi.view_devices'))
         else:
             flash("No fue posdible llevar dispositivo a mantenimiento","error")
     

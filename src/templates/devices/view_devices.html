@@ -17,21 +17,7 @@
             Device Inventory
         </h1>
 
-        <!-- Mensajes Flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="w-full max-w-lg mx-auto mb-4">
-            {% for category, message in messages %}
-            <div class="p-4 text-white rounded-lg text-center 
-                        {% if category == 'error' %} bg-rose-600 
-                        {% elif category == 'success' %} bg-emerald-500 
-                        {% else %} bg-gray-700 {% endif %}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
+
 
         <!-- Barra Fija -->
         <div
@@ -60,51 +46,83 @@
             </div>
         </div>
 
-
-        <!-- Lista de dispositivos -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-[230px]">
-            {% if get_devices %}
-            {% for device in get_devices %}
-            <div
-                class="device-card bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:shadow-xl text-left">
-                <form action="{{ url_for('edi.maintenance') }}" method="POST">
-                    {% if device.img %}
-                    <img class="w-full h-40 object-cover rounded-lg mb-4"
-                        src="{{ url_for('static', filename='uploads/' + device.img.split('/')[-1]) }}"
-                        alt="Device Image">
-                    {% endif %}
-                    <h2 class="text-lg sm:text-xl font-semibold text-center">{{ device.brand }} - {{ device.model }}
-                    </h2>
-
-                    <div class="mt-4 space-y-2 text-sm sm:text-base">
-                        <p>ID: <input type="text" value="{{ device.id }}" readonly name="id"
-                                class="outline-none bg-transparent text-yellow-400"></p>
-                        <p>Serial: <input type="text" value="{{ device.device_serial }}" readonly name="serial"
-                                class="outline-none bg-transparent text-blue-300"></p>
-                        <p><strong>State: </strong> {{ device.state }}</p>
-                        <p><strong>Active:</strong> {{ device.activo }}</p>
-                        <p><strong>Processor:</strong> {{ device.processor }}</p>
-                        <p><strong>RAM:</strong> {{ device.RAM }}</p>
-                        <p><strong>Hard Drive:</strong> {{ device.hard_disk }}</p>
-                        <p><strong>Charger:</strong> {{ device.charger }}</p>
-                        <p><strong>Equipment Type:</strong> {{ device.type_equipment }}</p>
-                        <p><strong>Keyboard:</strong> {{ device.keyboard }}</p>
-                        <p><strong>Mouse:</strong> {{ device.mouse }}</p>
-                        <p><strong>Screen:</strong> {{ device.screen }}</p>
-                        <p><strong>Multi Adapter:</strong> {{ device.multi_adapter }}</p>
-                        <p><strong>Active Tablet:</strong> {{ device.active_tablet }}</p>
-                        <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>
-                    </div>
-                    <button type="submit" class="bg-red-600 hover:bg-red-700 p-2 rounded-lg text-white">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                    </button>
-                </form>
+        <main class="mt-[230px]">
+            <!-- Mensajes Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="w-full max-w-lg mx-auto mb-4" id="flash-messages">
+                {% for category, message in messages %}
+                <div class="p-4 text-white rounded-lg text-center 
+                              {% if category == 'error' %} bg-rose-600 
+                              {% elif category == 'success' %} bg-emerald-500 
+                              {% else %} bg-gray-700 {% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            {% else %}
-            <p class="text-center text-gray-400 col-span-full">No devices found.</p>
+
             {% endif %}
-        </div>
+            {% endwith %}
+
+
+            <!-- Lista de dispositivos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
+
+                {% if get_devices %}
+                {% for device in get_devices %}
+                <div
+                    class="device-card bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:shadow-xl text-left">
+                    <form action="{{ url_for('edi.maintenance') }}" method="POST"
+                        class="p-4 bg-gray-800 rounded-lg shadow-md">
+                        {% if device.img %}
+                        <img class="w-full h-40 object-cover rounded-lg mb-4"
+                            src="{{ url_for('static', filename='uploads/' + device.img.split('/')[-1]) }}"
+                            alt="Device Image">
+                        {% endif %}
+                        <h2 class="text-lg sm:text-xl font-semibold text-center text-white">{{ device.brand }} - {{
+                            device.model }}</h2>
+
+                        <div class="mt-4 space-y-2 text-sm sm:text-base text-gray-300">
+                            <p>ID: <input type="text" value="{{ device.id }}" readonly name="id"
+                                    class="outline-none bg-transparent text-yellow-400"></p>
+                            <p>Serial: <input type="text" value="{{ device.device_serial }}" readonly name="serial"
+                                    class="outline-none bg-transparent text-blue-300"></p>
+                            <p><strong>State:</strong> {{ device.state }}</p>
+                            <p><strong>Active:</strong> {{ device.activo }}</p>
+                            <p><strong>Processor:</strong> {{ device.processor }}</p>
+                            <p><strong>RAM:</strong> {{ device.RAM }}</p>
+                            <p><strong>Hard Drive:</strong> {{ device.hard_disk }}</p>
+                            <p><strong>Charger:</strong> {{ device.charger }}</p>
+                            <p><strong>Equipment Type:</strong> {{ device.type_equipment }}</p>
+                            <p><strong>Keyboard:</strong> {{ device.keyboard }}</p>
+                            <p><strong>Mouse:</strong> {{ device.mouse }}</p>
+                            <p><strong>Screen:</strong> {{ device.screen }}</p>
+                            <p><strong>Multi Adapter:</strong> {{ device.multi_adapter }}</p>
+                            <p><strong>Active Tablet:</strong> {{ device.active_tablet }}</p>
+                            <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>
+
+                            {% if device.old_onwer %}
+                            <p><strong>Old owner:</strong> {{ device.old_onwer }}</p>
+                            {% else %}
+                            <p><strong>Old owner:</strong> The device has not had any user previously assigned</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Botón discreto alineado a la derecha -->
+                        <div class="flex justify-end mt-2">
+                            <button type="submit"
+                                class="p-1 px-3 text-sm bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-all">
+                                <i class="fa-solid fa-tools"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-center text-gray-400 col-span-full">No devices found.</p>
+                {% endif %}
+            </div>
     </div>
 
     <script>
@@ -126,8 +144,17 @@
 
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
-        }
+        } setTimeout(() => {
+            const flashMessages = document.getElementById("flash-messages");
+            if (flashMessages) {
+                flashMessages.style.transition = "opacity 0.5s";
+                flashMessages.style.opacity = "0";
+                setTimeout(() => flashMessages.remove(), 500);
+            }
+        }, 3000); // Desaparece después de 3 segundos
+
     </script>
+    </main>
 </body>
 
 </html>

@@ -7,11 +7,11 @@ from models.mddevices import Device
 
 hsoprt_bp = Blueprint('homeSoport', __name__)
 
+# Ruta para Vista home
+
 @hsoprt_bp.route('/homeSoport', methods=['GET', 'POST'])
 @login_required
 def home():
-    
-    
     if current_user.rol != "Admin":
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
@@ -28,7 +28,7 @@ def home():
 
 
 
-
+# Ruta para Vista Home Usuario
 @hsoprt_bp.route('/homeUser', methods=['GET', 'POST'])
 @login_required
 def homeUser():
@@ -48,48 +48,46 @@ def homeUser():
     
     return render_template('homeUser.html',user=current_user,get_all_keys=get_keys)
 
-@hsoprt_bp.route('/view_devices', methods=['GET', 'POST'])
+
+
+
+@hsoprt_bp.route('/selectd', methods=['GET', 'POST'])
 @login_required
-def view_devices():
-    if current_user.rol != "Admin":
-        flash("Acceso denegado", "error")
-        return redirect(url_for('homeSoport.homeUser'))
-    
-    cont_devices= Device.query.filter(Device.state !='maintenance').count()
-    cont_maintenance = Device.query.filter_by(state ='maintenance').count()
-    cont_users = User.query.count()
+def selectd():
+        if current_user.rol != "Admin":
+            flash("Acceso denegado", "error")
+            return redirect(url_for('homeSoport.homeUser'))
+        get_devices = Device.query.filter(Device.state != 'maintenance').all()
+        get_maintenance =Device.query.filter_by(state='maintenance').all()
+        cont_devices= Device.query.filter(Device.state !='maintenance').count()
+        cont_maintenance = Device.query.filter_by(state ='maintenance').count()
+        cont_users = User.query.count()
 
-    # Obtener todos los dispositivos
-    get_devices = Device.query.filter(Device.state != 'maintenance').all()
-    get_maintenance =Device.query.filter_by(state='maintenance').all()
-
+        
 
     # Filtrar por categoría si se seleccionó una
-    selected_category = request.form.get("selected_category")
-    if selected_category:
-        if selected_category == 'Total Devices':
-            redirect(url_for('homeSoport.view_devices'))
-            return render_template('devices/view_devices.html', get_devices=get_devices)
+        selected_category = request.form.get("selected_category")
+        if selected_category:
+            if selected_category == 'Total Devices':
+                redirect(url_for('devi.view_devices'))
+                return render_template('devices/view_devices.html', get_devices=get_devices)
+                
             
+            if selected_category == 'Maintenance':
+                redirect(url_for('edi.maintenance'))
+                return render_template('devices/maintenance.html', get_maintenance=get_maintenance)
+            
+            if selected_category == 'Users':
+                redirect(url_for('user.verify_edith'))
+                return render_template('verify_code.html')
+            
+            if selected_category =='Export':
+                redirect(url_for('export.export_page'))
+                return render_template('export.html')
+            
+            return render_template('devices/view_devices.html')
         
-        if selected_category == 'Maintenance':
-            redirect(url_for('edi.maintenance'))
-            return render_template('devices/maintenance.html', get_maintenance=get_maintenance)
-        
-        if selected_category == 'Users':
-            redirect(url_for('user.verify_edith'))
-            return render_template('verify_code.html')
-        
-        if selected_category =='Export':
-            redirect(url_for('export.export_page'))
-            return render_template('export.html')
-        
-
-        
-    
-        
-
-    return render_template('homeSoport.html', get_devices=get_devices,
-                           cont_all_devices=cont_devices,
-                           cont_maintenance=cont_maintenance,
-                           cont_users = cont_users)
+        return render_template("homeSoport.html", get_devices=get_devices,
+                            cont_all_devices=cont_devices,
+                            cont_maintenance=cont_maintenance,
+                            cont_users = cont_users)

@@ -58,9 +58,8 @@
 
             <!-- Features -->
             <div class="grid grid-cols-2 gap-4">
-                {% for field, label in { 'device_serial':'Serial', 'serie': 'Series', 'activo': 'Active', 'processor':
-                'Processor',
-                'RAM': 'RAM Memory', 'hard_disk': 'Hard Drive', 'screen': 'Screen', 'charger': 'Charger',
+                {% for field, label in {'activo': 'Active', 'processor':
+                'Processor', 'RAM': 'RAM Memory', 'hard_disk': 'Hard Drive', 'screen': 'Screen', 'charger': 'Charger',
                 'keyboard': 'Keyboard', 'mouse': 'Mouse', 'active_tablet': 'Active Tablet', 'serial_tablet': 'Tablet
                 Serial'
                 }.items() %}
@@ -112,7 +111,7 @@
 
             <!-- Buttons -->
             <div class="flex justify-between mt-6">
-                <a href="{{ url_for('homeSoport.view_devices') }}"
+                <a href="{{ url_for('devi.view_devices') }}"
                     class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded shadow">Come Back</a>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded shadow">Save
                     Changes</button>
@@ -126,7 +125,7 @@
             <div class="text-center text-red-500 text-xl font-semibold mb-5">
                 <p>Device not found.</p>
             </div>
-            <a href="{{ url_for('homeSoport.view_devices') }}"
+            <a href="{{ url_for('devi.view_devices') }}"
                 class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded shadow text-center w-full sm:w-auto">
                 Come Back
             </a>

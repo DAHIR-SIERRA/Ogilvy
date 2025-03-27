@@ -32,7 +32,6 @@ def devices():
         device_serial = request.form['device_serial']
         model = request.form['model']
         activo = request.form['activo']
-        serie = request.form['serie']
         processor = request.form['processor']
         ram = request.form['ram']
         hard_disk = request.form['hard_disk']
@@ -49,7 +48,7 @@ def devices():
 
         # Verificar si ya existe un dispositivo con datos únicos
         if Device.query.filter_by(device_serial=device_serial).first() or \
-           Device.query.filter_by(serie=serie).first():
+           Device.query.filter_by(activo=activo).first():
             flash("Este dispositivo ya existe", "error")
             return redirect(url_for('devi.devices'))
 
@@ -71,7 +70,6 @@ def devices():
             device_serial=device_serial,
             model=model,
             activo=activo,
-            serie=serie,
             processor=processor,
             RAM=ram,
             hard_disk=hard_disk,
@@ -85,7 +83,7 @@ def devices():
             screen=screen,
             observations=observations,
             old_onwer='None',
-            img=img_path,  # Guardar solo la ruta relativa
+            img=img_path, 
             state=state
         )
 
@@ -95,6 +93,16 @@ def devices():
         return redirect(url_for('devi.devices'))
 
     return render_template('devices/devices.html')
+
+@devices_bp.route('/view_devices', methods=['GET', 'POST'])
+@login_required
+def view_devices():
+    if current_user.rol != "Admin":
+        flash("Acceso denegado", "error")
+        return redirect(url_for('homeSoport.homeUser'))
+    get_devices = Device.query.filter(Device.state != 'maintenance').all()
+
+    return render_template('devices/view_devices.html',get_devices=get_devices)
 
 @devices_bp.route('/deviceUser', methods=['GET', 'POST'])
 @login_required

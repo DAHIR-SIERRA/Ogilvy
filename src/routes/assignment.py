@@ -54,6 +54,7 @@ def assignment():
             if device:
                 device.state = "Deallocated"
                 device.observations = observations
+                device.old_onwer = user.fullname
 
             user.device_serial = None
             flash("Desasignación realizada correctamente.", "success")

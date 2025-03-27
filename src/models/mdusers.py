@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     position_id = db.Column(db.Integer, db.ForeignKey('positions.id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
 
     # Relación opcional con Device por 'serial'
-    device_serial = db.Column(db.String(70), db.ForeignKey('devices.device_serial'), unique=True, nullable=True)
+    device_serial = db.Column(db.String(70), db.ForeignKey('devices.device_serial', onupdate='CASCADE'), unique=True, nullable=True)
 
     def is_active(self):
         return self._is_active  

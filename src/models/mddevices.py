@@ -10,7 +10,6 @@ class Device(db.Model):
     device_serial = db.Column(db.String(200), nullable=True, unique=True)
     model = db.Column(db.String(200), nullable=True)
     activo= db.Column(db.String(200), nullable= True,)
-    serie= db.Column(db.String(200), nullable= False,)
     processor = db.Column(db.String(200), nullable= True,)
     RAM = db.Column(db.String(200),nullable=True)
     hard_disk= db.Column(db.String(200),nullable=True)
@@ -30,14 +29,13 @@ class Device(db.Model):
     # Relación con User (un dispositivo puede estar asignado a un solo usuario)
     user = db.relationship('User', backref='device', lazy=True, uselist=False)
 
-    def __init__(self, brand, charger, device_serial, model, activo,serie,processor,RAM,hard_disk,type_equipment,
+    def __init__(self, brand, charger, device_serial, model, activo,processor,RAM,hard_disk,type_equipment,
                  keyboard,mouse,active_tablet,serial_tablet,base,multi_adapter,screen,observations,old_onwer, img,state="Not_used"):
         self.brand = brand
         self.charger = charger
         self.device_serial = device_serial
         self.model = model
         self.activo = activo
-        self.serie = serie
         self.processor = processor
         self.RAM = RAM
         self.hard_disk = hard_disk

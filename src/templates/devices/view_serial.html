@@ -27,10 +27,14 @@
                 <p><strong>Serial:</strong> {{ get_device.device_serial }}</p>
                 <p><strong>Asset:</strong> {{ get_device.activo }}</p>
                 <p><strong>Charger:</strong> {{ get_device.charger }}</p>
-                <p><strong>Series:</strong> {{ get_device.serie }}</p>
                 <p><strong>Processor:</strong> {{ get_device.processor }}</p>
                 <p><strong>RAM:</strong> {{ get_device.RAM }}</p>
                 <p><strong>Hard Disk:</strong> {{ get_device.hard_disk }}</p>
+                {% if get_device.old_onwer %}
+                            <p><strong>Old owner:</strong> {{ get_device.old_onwer }}</p>
+                        {% else %}
+                            <p><strong>Old owner:</strong> The device has not had any user previously assigned</p>
+                        {% endif %}
             </div>
             
             <div>
