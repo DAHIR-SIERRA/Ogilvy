@@ -39,8 +39,7 @@ def import_excel():
         for _, row in df.iterrows():
             # Verificar si el dispositivo ya existe en la base de datos
             existing_device = Device.query.filter(
-                (Device.device_serial == row['device_serial']) |
-                (Device.activo == row['activo'])
+                (Device.device_serial == row['device_serial']) 
             ).first()
 
             if existing_device:

@@ -30,11 +30,11 @@
                 <p><strong>Processor:</strong> {{ get_device.processor }}</p>
                 <p><strong>RAM:</strong> {{ get_device.RAM }}</p>
                 <p><strong>Hard Disk:</strong> {{ get_device.hard_disk }}</p>
-                {% if get_device.old_onwer %}
-                            <p><strong>Old owner:</strong> {{ get_device.old_onwer }}</p>
-                        {% else %}
-                            <p><strong>Old owner:</strong> The device has not had any user previously assigned</p>
-                        {% endif %}
+                {% if get_device.old_owner %}
+                    <p><strong>Old owner:</strong> {{ get_device.old_owner }}</p>
+                {% else %}
+                    <p><strong>Old owner:</strong> The device has not had any user previously assigned</p>
+                {% endif %}
             </div>
             
             <div>
@@ -43,10 +43,10 @@
                 <p><strong>Mouse:</strong> {{ get_device.mouse }}</p>
                 <p><strong>Screen:</strong> {{ get_device.screen }}</p>
                 <p><strong>Multi Adapter:</strong> {{ get_device.multi_adapter }}</p>
-                <p><strong>Old Owner:</strong> {{ get_device.old_owner }}</p>
                 <p><strong>Base:</strong> {{ get_device.base }}</p>
             </div>
         </div>
+        
     
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300 mt-6">
             <p><strong>Active Tablet:</strong> {{ get_device.active_tablet }}</p>

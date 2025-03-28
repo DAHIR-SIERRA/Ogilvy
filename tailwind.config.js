@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/templates/**/*.html',  // Ajusta la ruta según tu estructura de carpetas
-    './src/static/**/*.js'
+    "./src/templates/**/*.html", // Plantillas HTML de Flask
+    "./src/static/js/**/*.js",   // Archivos JS en static
   ],
   theme: {
     extend: {},
