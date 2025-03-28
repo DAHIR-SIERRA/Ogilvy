@@ -4,24 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+
     <title>Device Details</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
+
 
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-6">
 
     {% if get_device %}
-    <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-3xl w-full">
+    <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-3xl ">
         <div class="flex justify-center mb-6">
             {% if get_device and get_device.img %}
-            <img src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}" alt="Device Image">
+            <img src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}" alt="Device Image"
+                class="max-w-40 w-full max-h-40 h-full border-4 rounded-xl">
+
             {% else %}
-            <p class="text-white">No image available</p>
+            <p class="text-red-400">No image available</p>
             {% endif %}
         </div>
-    
+
         <h1 class="text-3xl font-bold text-center mb-6">{{ get_device.brand }} - {{ get_device.model }}</h1>
-    
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
             <div>
                 <p><strong>Serial:</strong> {{ get_device.device_serial }}</p>
@@ -31,12 +36,12 @@
                 <p><strong>RAM:</strong> {{ get_device.RAM }}</p>
                 <p><strong>Hard Disk:</strong> {{ get_device.hard_disk }}</p>
                 {% if get_device.old_owner %}
-                    <p><strong>Old owner:</strong> {{ get_device.old_owner }}</p>
+                <p><strong>Old owner:</strong> {{ get_device.old_owner }}</p>
                 {% else %}
-                    <p><strong>Old owner:</strong> The device has not had any user previously assigned</p>
+                <p><strong>Old owner:</strong> The device has not had any user previously assigned</p>
                 {% endif %}
             </div>
-            
+
             <div>
                 <p><strong>Equipment Type:</strong> {{ get_device.type_equipment }}</p>
                 <p><strong>Keyboard:</strong> {{ get_device.keyboard }}</p>
@@ -46,30 +51,32 @@
                 <p><strong>Base:</strong> {{ get_device.base }}</p>
             </div>
         </div>
-        
-    
+
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300 mt-6">
             <p><strong>Active Tablet:</strong> {{ get_device.active_tablet }}</p>
             <p><strong>Serial Tablet:</strong> {{ get_device.serial_tablet }}</p>
             <p><strong>Status:</strong> <span class="text-green-400">{{ get_device.state }}</span></p>
         </div>
-    
+
         <div class="mt-4 text-gray-400">
             <p><strong>Observations:</strong> {{ get_device.observations }}</p>
         </div>
-    
+
         <div class="mt-8 text-center">
-            <a href="{{ url_for('add.assignment') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+            <a href="{{ url_for('add.assignment') }}"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
                 Come Back
             </a>
         </div>
     </div>
-    
+
     {% else %}
     <div class="text-center">
         <p class="text-xl text-gray-400 mb-4">Device not found</p>
-        <a href="{{ url_for('add.assignment') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Come Back 
+        <a href="{{ url_for('add.assignment') }}"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Come Back
         </a>
     </div>
     {% endif %}

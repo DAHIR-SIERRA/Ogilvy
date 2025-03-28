@@ -163,12 +163,13 @@ def maintenance():
             return redirect(url_for('devi.view_devices'))
 
         if existing_id:
+            get_devices = Device.query.filter(Device.state!='maintenance').all()
             existing_id.state = 'maintenance'
             db.session.commit()
             flash("El dispositivo entro en mantenimiento","success")
-            return redirect(url_for('devi.view_devices'))
+            return render_template('devices/view_devices.html',get_devices=get_devices)   
         else:
-            flash("No fue posdible llevar dispositivo a mantenimiento","error")
+            return flash("No fue posdible llevar dispositivo a mantenimiento","error")
     
     return render_template("devices/maintenance.html")
 
@@ -185,10 +186,11 @@ def repaired():
         existing_id = Device.query.filter_by(id = id).first()
 
         if existing_id:
+            get_maintenance=Device.query.filter_by(state='maintenance').all()
             existing_id.state = 'Repaired'
             db.session.commit()
             flash("El dispositivo fue reparado","success")
-            return redirect(url_for('homeSoport.home'))
+            return render_template("devices/maintenance.html",get_maintenance=get_maintenance)
         else:
             flash("Dispositivo no dado de alta","error")
     

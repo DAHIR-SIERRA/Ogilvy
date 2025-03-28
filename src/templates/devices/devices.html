@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interfaz de Inicio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+
 </head>
 <header
-    class=" fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 w-full max-w-[1788px] h-[80px] flex items-center justify-between px-6 md:px-16  shadow-lg rounded-b-lg">
+    class=" fixed top-0 left-0 z-50 bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 w-full max-w-[1788px] h-[80px] flex items-center justify-between px-6 md:px-16  shadow-lg rounded-b-lg">
     <button id="menu-btn" class="text-white text-4xl md:hidden focus:outline-none">
         ☰
     </button>
@@ -173,6 +174,7 @@
                 </button>
             </div>
         </form>
+       
     </main>
 </body>
 

@@ -1,3 +1,13 @@
 {
-    "livePreview.defaultPreviewPath": "/src/templates/homeSoport.html"
-}
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.preview": true,
+    "tailwindCSS.emmetCompletions": true,
+    "tailwindCSS.includeLanguages": {
+      "html": "html",
+      "javascript": "javascript",
+      "python": "html"
+    }
+  }
+  
