@@ -35,7 +35,7 @@ def ajax_export():
         'id', 'brand', 'charger', 'device_serial', 'model', 'activo',
         'processor', 'RAM', 'hard_disk', 'type_equipment', 'keyboard', 'mouse',
         'active_tablet', 'serial_tablet', 'base', 'multi_adapter', 'screen',
-        'state','old_onwer','img','observations'
+        'state','old_onwer','img','user_idDocument','observations'
     ]
 
     for col_num, column_title in enumerate(columns):
@@ -67,7 +67,9 @@ def ajax_export():
         ws.write(row_num, 17, dev.state or '')
         ws.write(row_num, 18, dev.old_onwer or '')
         ws.write(row_num, 19, dev.img or '')
-        ws.write(row_num, 20, dev.observations or '')
+        ws.write(row_num, 20, dev.user_idDocument or '')
+        ws.write(row_num, 21, dev.observations or '')
+        
 
     # Guardar en la salida
     wb.save(output)

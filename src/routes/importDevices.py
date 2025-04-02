@@ -67,6 +67,7 @@ def import_excel():
                 state='Not_Used',
                 old_onwer='' if pd.isna(row.get('Old Owner')) else row.get('Old Owner'),
                 img=row['img'],
+                user_idDocument=row['user_idDocument'],
                 observations=row['observations']
             )
 

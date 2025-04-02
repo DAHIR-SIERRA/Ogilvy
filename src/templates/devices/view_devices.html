@@ -63,6 +63,7 @@
 
             {% endif %}
             {% endwith %}
+            
 
 
             <!-- Lista de dispositivos -->
@@ -99,8 +100,12 @@
                             <p><strong>Screen:</strong> {{ device.screen }}</p>
                             <p><strong>Multi Adapter:</strong> {{ device.multi_adapter }}</p>
                             <p><strong>Active Tablet:</strong> {{ device.active_tablet }}</p>
-                            <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>
-
+                            <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>   
+                            <p><strong>User ID:</strong> 
+                                <input type="text" name="user_id" value="{{ device.user_idDocument }}" 
+                                    readonly 
+                                    class="outline-none bg-transparent text-gray-300 border-none p-0">
+                            </p>
                             {% if device.old_onwer %}
                             <p><strong>Old owner:</strong> {{ device.old_onwer }}</p>
                             {% else %}

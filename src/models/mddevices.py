@@ -27,10 +27,11 @@ class Device(db.Model):
     state = db.Column(db.String(30), nullable=True, default="Not_used")
     
     # Relación con User (un dispositivo puede estar asignado a un solo usuario)
-    user = db.relationship('User', backref='device', lazy=True, uselist=False)
+
+    user_idDocument = db.Column(db.String(70), db.ForeignKey('users.idDocument', onupdate='CASCADE'), unique=False, nullable=True)
 
     def __init__(self, brand, charger, device_serial, model, activo,processor,RAM,hard_disk,type_equipment,
-                 keyboard,mouse,active_tablet,serial_tablet,base,multi_adapter,screen,observations,old_onwer, img,state="Not_used"):
+                 keyboard,mouse,active_tablet,serial_tablet,base,multi_adapter,screen,observations,old_onwer, img,user_idDocument,state="Not_used"):
         self.brand = brand
         self.charger = charger
         self.device_serial = device_serial
@@ -50,6 +51,7 @@ class Device(db.Model):
         self.observations = observations
         self.old_onwer = old_onwer
         self.img = img
+        self.user_idDocument =user_idDocument
         self.state = state
         
 

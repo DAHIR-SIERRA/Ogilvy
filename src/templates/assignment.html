@@ -91,44 +91,33 @@
     <body class="p-6 mt-[80px] bg-gray-900 m-0  text-white">
         <div class="overflow-x-auto bg-gray-900 p-4 shadow-md rounded-lg">
             <div class="mb-4 flex">
-                <input type="text" id="search-user" placeholder="Search by Username..."
+                <input type="text" id="search-device" placeholder="Search by serial..."
                     class="w-[250px] p-2 text-gray-900 rounded-md border border-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
             </div>
             <div class="max-h-[200px] overflow-y-auto">
-                <table class="table-auto w-full border-collapse border border-gray-600" id="user-table">
+                <table class="table-auto w-full border-collapse border border-gray-600" id="device-table">
                     <thead class="sticky top-0">
                         <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
-                            <th class="border border-gray-600 px-4 py-2">User</th>
-                            <th class="border border-gray-600 px-4 py-2">Fullname</th>
-                            <th class="border border-gray-600 px-4 py-2">idDocument</th>
-                            <th class="border border-gray-600 px-4 py-2">Email</th>
-                            <th class="border border-gray-600 px-4 py-2">Rol</th>
-                            <th class="border border-gray-600 px-4 py-2">Department</th>
-                            <th class="border border-gray-600 px-4 py-2">Position</th>
+                            <th class="border border-gray-600 px-4 py-2">Brand</th>
+                            <th class="border border-gray-600 px-4 py-2">Model</th>
                             <th class="border border-gray-600 px-4 py-2">Serial</th>
+                            <th class="border border-gray-600 px-4 py-2">State</th>
+                            <th class="border border-gray-600 px-4 py-2">User idDocument</th>
+                            <th class="border border-gray-600 px-4 py-2">Observations</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        {% for user, departament_name, position_name in get_key %}
+                        {% for device in get_all_serials %}
                         <tr ondblclick="copyToForm(this)"
                             class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
-                            <td class="border border-gray-600 px-4 py-2">{{ user.username }}</td>
-                            <td class="border border-gray-600 px-4 py-2">{{ user.fullname }}</td>
-                            <td class="border border-gray-600 px-4 py-2">{{ user.idDocument }}</td>
-                            <td class="border border-gray-600 px-4 py-2">{{ user.email }}</td>
-                            <td class="border border-gray-600 px-4 py-2">{{ user.rol }}</td>
-                            <td class="border border-gray-600 px-4 py-2">{{ departament_name if departament_name else
-                                "Sin
-                                Departamento" }}</td>
-                            <td class="border border-gray-600 px-4 py-2">{{ position_name if position_name else "Sin
-                                Posición" }}</td>
-                            <td class="border border-gray-600 px-4 py-2">
-                                <form action="{{ url_for('add.view_serial') }}" method="POST">
-                                    <input type="hidden" name="serial" value="{{ user.device_serial }}">
-                                    <button type="submit" class="text-blue-300 hover:text-blue-600">{{
-                                        user.device_serial }}</button>
-                                </form>
-                            </td>
+                            <td class="border border-gray-600 px-4 py-2">{{ device.brand }}</td>
+                            <td class="border border-gray-600 px-4 py-2">{{ device.model }}</td>
+                            <td class="border border-gray-600 px-4 py-2">{{ device.device_serial }}</td>
+                            <td class="border border-gray-600 px-4 py-2">{{ device.state }}</td>
+                            <td class="border border-gray-600 px-4 py-2">{{ device.user_idDocument }}</td>
+                            <td class="border border-gray-600 px-4 py-2">{{ device.observations }}</td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -148,41 +137,38 @@
                 <table class="w-full border-collapse border border-gray-700 text-sm">
                     <thead class="bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 text-black text-center">
                         <tr>
-                            <th class="border border-gray-700 px-3 py-1">Username</th>
-                            <th class="border border-gray-700 px-3 py-1">Fullname</th>
-                            <th class="border border-gray-700 px-3 py-1">ID Document</th>
-                            <th class="border border-gray-700 px-3 py-1">Rol</th>
-                            <th class="border border-gray-700 px-3 py-1">Serial of Device</th>
+                            <th class="border border-gray-700 px-3 py-1">Brand</th>
+                            <th class="border border-gray-700 px-3 py-1">Model</th>
+                            <th class="border border-gray-700 px-3 py-1">device_serial</th>
+                            <th class="border border-gray-700 px-3 py-1">State</th>
+                            <th class="border border-gray-700 px-3 py-1">User idDocument</th>
                             <th class="border border-gray-700 px-3 py-1">Observations</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="bg-gray-800 hover:bg-gray-700 transition text-white">
                             <td class="border border-gray-700 px-3 py-1">
-                                <input type="text" id="form-username" name="username"
+                                <input type="text" id="form-brand" name="brand"
                                     class="bg-transparent text-white w-full outline-none text-center" readonly>
                             </td>
                             <td class="border border-gray-700 px-3 py-1">
-                                <input type="text" id="form-fullname" name="fullname"
+                                <input type="text" id="form-model" name="model"
                                     class="bg-transparent text-white w-full outline-none text-center" readonly>
                             </td>
                             <td class="border border-gray-700 px-3 py-1">
-                                <input type="text" id="form-idDocument" name="idDocument"
+                                <input type="text" id="form-device_serial" name="device_serial"
                                     class="bg-transparent text-white w-full outline-none text-center" readonly>
                             </td>
                             <td class="border border-gray-700 px-3 py-1">
-                                <select name="rol" id="form-rol"
-                                    class="bg-gray-900 text-white w-full outline-none border border-gray-500 rounded px-2 py-1 text-center">
-                                    <option value="User" class="text-white">User</option>
-                                    <option value="Admin" class="text-white">Admin</option>
-                                </select>
+                                <input type="text" id="form-state"
+                                    class="bg-transparent text-white w-full text-center outline-none" name="state" readonly>
                             </td>
                             <td class="border border-gray-700 px-3 py-1">
-                                <input type="text" id="form-serial"
-                                    class="bg-transparent text-white w-full text-center outline-none" name="serial">
+                                <input type="text" id="form-user_idDocument"
+                                    class="bg-transparent text-white w-full text-center outline-none" name="idDocument">
                             </td>
                             <td class="border border-gray-700 px-3 py-1">
-                                <input type="text" name="observations"
+                                <input type="text" id="form-observations" name="observations"
                                     class="bg-transparent text-white w-full text-center outline-none">
                             </td>
                         </tr>
@@ -210,35 +196,40 @@
 
         <div class="overflow-x-auto mt-4 bg-gray-900 bg-opacity-90 p-4 rounded-lg shadow-md">
             <div class="mb-4 flex">
-                <input type="text" id="search-serial" placeholder="Search by Serial..."
+                <input type="text" id="search-user" placeholder="Search by Username..."
                     class="w-[250px] p-2 text-gray-900 rounded-md border border-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
             </div>
             <div class="max-h-[200px] overflow-y-auto">
-            <table id="serial-table" class="w-full border-collapse border border-gray-600 rounded-lg text-gray-300">
+            <table id="user-table" class="w-full border-collapse border border-gray-600 rounded-lg text-gray-300">
                 <thead class="bg-gray-800 text-white text-sm uppercase tracking-wide sticky top-0 ">
                     <tr>
-                        <th class="border border-gray-600 px-4 py-2">Brand</th>
-                        <th class="border border-gray-600 px-4 py-2">Model</th>
-                        <th class="border border-gray-600 px-4 py-2">State</th>
-                        <th class="border border-gray-600 px-4 py-2">Serial</th>
+                        <th class="border border-gray-600 px-4 py-2">Username</th>
+                        <th class="border border-gray-600 px-4 py-2">Full name</th>
+                        <th class="border border-gray-600 px-4 py-2">Department</th>
+                        <th class="border border-gray-600 px-4 py-2">Position</th>
+                        <th class="border border-gray-600 px-4 py-2">Id Document</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for devices in get_all_serials %}
+                    {% for user in get_all_users %}
                     <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer text-center">
-                        <td class="border border-gray-600 px-4 py-2">{{ devices.brand }}</td>
-                        <td class="border border-gray-600 px-4 py-2">{{ devices.model }}</td>
-                        <td class="border border-gray-600 px-4 py-2">{{ devices.state }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.username }}</td>
+                        <td class="border border-gray-600 px-4 py-2">{{ user.fullname }}</td>
+                        
+                        {% for device, departament_name, position_name in get_key %}
                         <td class="border border-gray-600 px-4 py-2">
-                            <form action="{{ url_for('add.view_serial') }}" method="POST">
-                                <input type="hidden" name="serial" value="{{ devices.device_serial }}">
-                                <button type="submit" class="text-blue-300 hover:text-blue-600">{{
-                                    devices.device_serial }}</button>
-                            </form>
+                            {{ departament_name if departament_name else "Sin Departamento" }}
                         </td>
+                        <td class="border border-gray-600 px-4 py-2">
+                            {{ position_name if position_name else "Sin Posición" }}
+                        </td>
+                        {% endfor %}
+                        
+                        <td class="border border-gray-600 px-4 py-2">{{ user.idDocument }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
+                
             </table>
         </div>
 
@@ -250,11 +241,13 @@
     <script>
         function copyToForm(row) {
             let cells = row.getElementsByTagName("td");
-            document.getElementById("form-username").value = cells[0].innerText;
-            document.getElementById("form-fullname").value = cells[1].innerText;
-            document.getElementById("form-idDocument").value = cells[2].innerText;
-            document.getElementById("form-rol").value = cells[4].innerText;
-            document.getElementById("form-serial").value = cells[7].innerText;
+            document.getElementById("form-brand").value = cells[0].innerText;
+            document.getElementById("form-model").value = cells[1].innerText;
+            document.getElementById("form-device_serial").value = cells[2].innerText;
+            document.getElementById("form-state").value = cells[3].innerText;
+            document.getElementById("form-user_idDocument").value = cells[4].innerText;
+            document.getElementById("form-observations").value = cells[5].innerText;
+            
         }
 
 
@@ -282,8 +275,8 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            filterTable("search-user", "user-table", 0),
-                filterTable("search-serial", "serial-table", 3);
+            filterTable("search-device", "user-device", 0),
+                filterTable("search-user", "user-table", 3);
         });
 
 

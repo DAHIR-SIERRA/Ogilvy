@@ -18,45 +18,46 @@ def assignment():
 
     if request.method == 'POST':
         action = request.form.get('action')
-        id_document = request.form.get('idDocument')
+        serial = request.form.get('device_serial')
         observations = request.form.get('observations', '').strip()
 
-        user = User.query.filter_by(idDocument=id_document).first()
+        device = Device.query.filter_by(device_serial=serial).first()
 
-        if not user:
-            flash("Error: Usuario no encontrado.", "error")
+        if not device:
+            flash("Error: No hay Usuario seleccionado.", "error")
             return redirect(url_for('add.assignment'))
 
         if action == "assign":
-            rol = request.form.get('rol')
-            serial = request.form.get('serial')
 
-            if user.rol != rol:
-                user.rol = rol
-                flash("Rol actualizado correctamente", "success")
+            idDocument = request.form.get('idDocument')
 
-            if serial:
-                device = Device.query.filter_by(device_serial=serial).first()
+            if idDocument:
+                verify_id = User.query.filter_by(idDocument=idDocument).first()
 
-                if not device:
-                    flash("Error: El dispositivo seleccionado no existe.", "error")
+                if not verify_id:
+                    flash("Error: El Usuario seleccionado no existe.", "error")
                 elif device.state not in ["Not_Used", "Deallocated", "Repaired"]:
-                    flash("Error: El dispositivo no está disponible para asignación.", "error")
+                    flash(f"Error: El estado del dispositvo es  {device.state}", "error")
                 else:
-                    user.device_serial = serial
+                    device.user_idDocument = idDocument
                     device.state = "Assigned"
                     device.observations = observations
+                    db.session.commit()
                     flash("Asignación realizada correctamente.", "success")
+                
 
-        elif action == "delete" and user.device_serial:
-            device = Device.query.filter_by(device_serial=user.device_serial).first()
+        elif action == "delete" and device.user_idDocument:
+
+            device = Device.query.filter_by(user_idDocument= device.user_idDocument).first()
+
 
             if device:
+                assigned_user = User.query.filter_by(idDocument=device.user_idDocument).first()
                 device.state = "Deallocated"
                 device.observations = observations
-                device.old_onwer = user.fullname
+                device.old_onwer = assigned_user.fullname
 
-            user.device_serial = None
+            device.user_idDocument = None
             flash("Desasignación realizada correctamente.", "success")
 
         db.session.commit()
@@ -71,7 +72,7 @@ def assignment():
     )
 
     get_users = User.query.all()
-    get_serials = Device.query.filter(Device.state.in_(["Not_Used", "Deallocated", "Repaired"])).all()
+    get_serials = Device.query.all()
 
     return render_template('assignment.html', get_key=get_keys, get_all_serials=get_serials, get_all_users=get_users)
 

@@ -112,7 +112,7 @@ def deviceUser():
         return redirect(url_for('homeSoport.home'))
     
     # Consulta los dispositivos asociados al usuario actual
-    my_devices = db.session.query(Device).join(User, Device.device_serial == User.device_serial).filter(User.id == current_user.id).all()
+    my_devices = db.session.query(Device).join(User, Device.user_idDocument == User.idDocument).filter(User.id == current_user.id).all()
 
     return render_template('devices/deviceUser.html', my_devices=my_devices)
 

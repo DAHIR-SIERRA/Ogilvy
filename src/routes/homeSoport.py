@@ -57,6 +57,7 @@ def selectd():
         if current_user.rol != "Admin":
             flash("Acceso denegado", "error")
             return redirect(url_for('homeSoport.homeUser'))
+
         get_devices = Device.query.filter(Device.state != 'maintenance').all()
         get_maintenance =Device.query.filter_by(state='maintenance').all()
         cont_devices= Device.query.filter(Device.state !='maintenance').count()

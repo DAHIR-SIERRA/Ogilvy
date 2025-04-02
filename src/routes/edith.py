@@ -155,9 +155,9 @@ def maintenance():
     
     if request.method=='POST':
         id= request.form['id']
-        serial= request.form['serial']
+        user_id= request.form['user_id']
         existing_id = Device.query.filter_by(id = id).first()
-        have_owner= User.query.filter_by(device_serial= serial).first()
+        have_owner= Device.query.filter_by(user_idDocument=user_id).first()
         if have_owner:
             flash("Antes de enviar este dispositivo a mantenimiento, debes desvincularlo del usuario al que está asignado","error")
             return redirect(url_for('devi.view_devices'))
@@ -195,5 +195,3 @@ def repaired():
             flash("Dispositivo no dado de alta","error")
     
     return render_template("devices/maintenance.html", get_maintenance=get_maintenance)
-
-
