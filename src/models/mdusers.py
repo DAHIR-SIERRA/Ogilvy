@@ -1,6 +1,7 @@
 from models import db
 from flask_login import UserMixin
 import random
+from datetime import datetime, timedelta
 
 class User(db.Model, UserMixin):  
     __tablename__ = 'users'
@@ -13,7 +14,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(300), nullable=False, unique=True)
     rol = db.Column(db.String(50), nullable=False)
     code_edith = db.Column(db.String(20), nullable=True)
-    _is_active = db.Column("is_active", db.Boolean, default=True)
+    code_expires_at = db.Column(db.DateTime, nullable=True)
+    _is_active = db.Column("is_active", db.Boolean, default=False)
 
     # Relación con Departament por ID
     departament_id = db.Column(db.Integer, db.ForeignKey('departaments.id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
@@ -40,13 +42,17 @@ class User(db.Model, UserMixin):
         self.device_serial = device_serial
         self._is_active = is_active
 
-    def generate_code_edith():
-        code = "".join(str(random.randint(0, 9)) for _ in range(5))
-        return code
 
 
     def __repr__(self):
         return f'<User {self.username}>'
+    
+    
+    def generate_code_edith():
+        code = "".join(str(random.randint(0, 9)) for _ in range(5))
+        return code
+    
+
 
 
 

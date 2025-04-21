@@ -74,7 +74,7 @@ def assignment():
     get_users = User.query.all()
     get_serials = Device.query.all()
 
-    return render_template('assignment.html', get_key=get_keys, get_all_serials=get_serials, get_all_users=get_users)
+    return render_template('Home/homesoport/assignment/assignment.html', get_key=get_keys, get_all_serials=get_serials, get_all_users=get_users)
 
 
 
@@ -102,5 +102,5 @@ def view_serial():
         
        
 
-        return render_template("devices/view_serial.html", get_device=existing_device)
+        return render_template("Home/homesoport/devices/view_serial.html", get_device=existing_device)
 

@@ -31,7 +31,7 @@ def position():
 
     # Obtener todos los posiciones de la base de datos
     positioncarg = Position.query.all()
-    return render_template("position.html", position_cargada=positioncarg)
+    return render_template("Home/homesoport/position/position.html", position_cargada=positioncarg)
 
 
 @position_bp.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -57,9 +57,7 @@ def update(id):
             flash("Posicion no encontrado", "error")
             return redirect(url_for('posi.position'))
     
-    # Si es un GET, prellenar el formulario con los datos actuales
-    if position:
-        return render_template("update_position.html", position=position)
+   
     else:
         flash("Posicion no encontrado", "error")
         return redirect(url_for('posi.position'))

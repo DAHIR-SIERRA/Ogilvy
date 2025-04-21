@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Details</title>
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen p-6 ">
+
+    {% if my_devices %}
+    <div class="max-w-7xl mx-auto">
+        <div class="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {% for device in my_devices %}
+            <div class="bg-gray-800 shadow-lg rounded-xl p-6 border border-gray-700" >
+                <div class="flex justify-center mb-4">
+                    {% if device.img %}
+                    <img class="w-40 h-40 object-cover rounded-lg border border-gray-600 bg-gray-900"
+                        src="{{ url_for('static', filename='uploads/' + (device.img.split('/')[-1] if device.img else 'default.jpg')) }}"
+                        alt="Device Image">
+                    {% endif %}
+                </div>
+
+                <h2 class="text-xl font-bold text-center mb-4">{{ device.brand }} - {{ device.model }}</h2>
+
+                <div class="grid grid-cols-1 gap-2 text-gray-300 text-sm ">
+                    <p><strong>Serial:</strong> {{ device.device_serial }}</p>
+                    <p><strong>Asset:</strong> {{ device.activo }}</p>
+                    <p><strong>Processor:</strong> {{ device.processor }}</p>
+                    <p><strong>RAM:</strong> {{ device.RAM }}</p>
+                    <p><strong>Hard Disk:</strong> {{ device.hard_disk }}</p>
+                    <p><strong>Type:</strong> {{ device.type_equipment }}</p>
+                    <p><strong>Keyboard:</strong> {{ device.keyboard }}</p>
+                    <p><strong>Tablet:</strong> {{ device.active_tablet }}</p>
+                    <p><strong>Tablet Serial:</strong> {{ device.serial_tablet }}</p>
+                    <p><strong>Base:</strong> {{ device.base }}</p>
+                    <p><strong>Mouse:</strong> {{ device.mouse }}</p>
+                    <p><strong>Screen:</strong> {{ device.screen }}</p>
+                    <p><strong>Old Owner:</strong> {{ device.old_onwer }}</p>
+                    <p><strong>Status:</strong> <span class="text-green-400">{{ device.state }}</span></p>
+                </div>
+
+                <div class="mt-4 text-gray-400 text-sm">
+                    <p><strong>Observations:</strong> {{ device.observations }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex justify-center mt-12">
+            <a href="{{ url_for('homeSoport.homeUser') }}"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow-lg">
+                Come Back Home
+            </a>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center">
+        <p class="text-xl text-gray-400 mb-4">Device not found</p>
+        <a href="{{ url_for('homeSoport.homeUser') }}"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Come Back Home
+        </a>
+    </div>
+    {% endif %}
+
+</body>
+
+</html>

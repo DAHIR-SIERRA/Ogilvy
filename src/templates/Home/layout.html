@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <title>{% block title %}Default Title{% endblock %}</title>
+</head>
+
+<body class="bg-gray-900 m-0 p-0 text-white">
+    {% set current_path = request.path %}
+
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0  z-50 bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 w-full h-[80px] flex items-center justify-between px-6 md:px-16 shadow-lg rounded-b-lg">
+        <button id="menu-btn" class="text-white text-4xl md:hidden focus:outline-none">☰</button>
+
+        <!-- Botón logout (esquina derecha) -->
+        <a href="{{ url_for('user.logout') }}"
+            class="text-white text-lg font-semibold hover:text-blue-200 transition duration-300 absolute top-5 right-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+            </svg>
+        </a>
+
+        <!-- Menú Móvil -->
+        <div id="mobile-menu"
+            class="fixed top-0 left-0 h-full w-64 bg-gray-900 shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col items-center py-6 space-y-2 border-r border-gray-700">
+            <button id="close-menu" class="absolute top-4 right-4 text-white text-2xl">✖</button>
+
+            {% set links = [
+                ('homeSoport.home', 'Home'),
+                ('devi.devices', 'Devices'),
+                ('add.assignment', 'Assignment'),
+                ('departament.departament', 'Department'),
+                ('posi.position', 'Position'),
+            ] %}
+
+            {% for endpoint, label in links %}
+                <a href="{{ url_for(endpoint) }}"
+                   class="text-white text-lg font-semibold w-full text-center py-3 border-b border-gray-600 transition duration-300
+                   {% if current_path == url_for(endpoint) %} bg-gray-700 shadow-lg {% else %} hover:text-yellow-300 {% endif %}">
+                    {{ label }}
+                </a>
+            {% endfor %}
+
+            <a href="{{ url_for('user.logout') }}"
+                class="text-white text-lg font-semibold hover:text-gray-300 transition duration-300 w-full text-center py-3 border-b border-gray-600">
+                LogOut
+            </a>
+        </div>
+
+        <!-- Menú Desktop -->
+        <ul id="menu" class="hidden md:flex md:flex-row list-none space-x-6 text-white text-lg font-semibold">
+            {% for endpoint, label in links %}
+                <li>
+                    <a href="{{ url_for(endpoint) }}"
+                       class="transition duration-300 cursor-pointer px-3 py-1 rounded-lg
+                       {% if current_path == url_for(endpoint) %} bg-gray-600 shadow-lg {% else %} hover:text-blue-400 {% endif %}">
+                        {{ label }}
+                    </a>
+                </li>
+            {% endfor %}
+            
+        </ul>
+    </header>
+
+    <!-- CONTENIDO DE CADA PÁGINA -->
+    <main class="mt-[80px] flex flex-col items-center justify-center w-full px-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="w-full max-w-lg mb-4 mt-4" id="flash-messages">
+            {% for category, message in messages %}
+            <div class="p-4 rounded-lg text-center 
+                {% if category == 'error' %} bg-red-700 
+                {% elif category == 'success' %} bg-green-700 
+                {% else %} bg-pink-700 {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% block content %}
+        <section class="w-full max-w-4xl text-center py-10 px-4">
+            
+        </section>
+        {% endblock %}
+    </main>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.getElementById("menu-btn").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.remove("-translate-x-full");
+        });
+        document.getElementById("close-menu").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.add("-translate-x-full");
+        });
+
+        setTimeout(() => {
+            const flashMessages = document.getElementById("flash-messages");
+            if (flashMessages) {
+                flashMessages.style.transition = "opacity 0.5s";
+                flashMessages.style.opacity = "0";
+                setTimeout(() => flashMessages.remove(), 500);
+            }
+        }, 3000);
+
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+</body>
+
+</html>

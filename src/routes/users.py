@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from flask import session
 from models.mddepartament import Departament
 from models.mdposition import Position
-from models.mddevices import Device
+
 
 users_bp = Blueprint("user", __name__)
 
@@ -54,8 +54,12 @@ def register():
             email=email,
             departament_id=departamento.id,  # Guardar el ID correcto
             position_id=posicion.id,  # Guardar el ID correcto
-            rol=rol
+            rol=rol,
+            is_active=False,
         )
+        from datetime import datetime, timedelta
+        new_user.code_edith = User.generate_code_edith()
+        new_user.code_expires_at = datetime.utcnow() + timedelta(minutes=1)  # expira en 10 minutos
 
         db.session.add(new_user)
         db.session.commit()
@@ -79,6 +83,10 @@ def login():
 
         if user and check_password_hash(user.password, password):
             login_user(user)
+            if not user.is_active():
+                flash("Debes verificar tu cuenta antes de iniciar sesión.")
+                return redirect(url_for('very.verify'))
+            
             flash("Inicio de sesión exitoso", "success")
             
             if user.rol == 'User':
@@ -106,7 +114,7 @@ def logout():
 @users_bp.route('/home')
 @login_required
 def home():
-    return render_template("homeSoport.html", user=current_user)
+    return render_template("Home/homesoport/homeSoport.html", user=current_user)
 
 
     
@@ -125,11 +133,11 @@ def verify_edith():
             departaments = Departament.query.all()
             carposition = Position.query.all()
             flash("Usuario encontrado", "success")
-            return render_template('users.html', user=user, departaments=departaments, carposition=carposition)  # Pasar el usuario encontrado a la plantilla
+            return render_template('Home/homesoport/edith_user/users.html', user=user, departaments=departaments, carposition=carposition)  # Pasar el usuario encontrado a la plantilla
         else:
             flash("Usuario no ha sido encontrado o el código ha sido desactivado", "error")
 
-    return render_template('verify_code.html')  # Siempre renderiza la página en GET
+    return render_template('Home/homesoport/edith_user/verify_code.html')  # Siempre renderiza la página en GET
 
          
 @users_bp.route('/users', methods=['GET', 'POST'])
@@ -172,7 +180,7 @@ def users():
 
         return redirect(url_for("user.verify_edith"))
 
-    return render_template("users.html")
+    return render_template("Home/homesoport/edith_user/users.html")
 
          
 

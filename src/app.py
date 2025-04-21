@@ -5,6 +5,7 @@ from models.mdusers import User
 from models.mddevices import Device  
 from routes import init_app
 from flask_login import LoginManager
+from Extensions import mail  # <-- importar el objeto mail
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Kachy7070'
@@ -27,6 +28,18 @@ def load_user(user_id):
 
 # Registrar Blueprints
 init_app(app)
+
+# Configurar Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'braynerdahirsierrasanabria@gamil.com'
+app.config['MAIL_PASSWORD'] = 'Kachy9090@'  # Usa contraseña de aplicación
+app.config['MAIL_DEFAULT_SENDER'] = 'braynerdahirsierrasanabria@gamil.com'
+
+mail.init_app(app)
+
+
 
 @app.route('/')
 def index():

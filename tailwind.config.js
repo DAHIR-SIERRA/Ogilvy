@@ -1,7 +1,8 @@
 module.exports = {
   content: [
     "./src/templates/**/*.html", // Archivos de plantillas Flask
-    "./src/static/js/**/*.js", // Archivos JS en static (si usas Tailwind en scripts)
+    "./src/static/js/**/*.js",
+     // Archivos JS en static (si usas Tailwind en scripts)
   ],
   theme: {
     extend: {

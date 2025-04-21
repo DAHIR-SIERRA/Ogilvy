@@ -66,9 +66,9 @@ def edith_devices():
         }
         
 
-        return render_template("devices/edith_devices.html", get_device=get_device)
+        return render_template("Home/homesoport/devices/edith_devices.html", get_device=get_device)
 
-    return render_template("devices/edith_devices.html")
+    return render_template("Home/homesoport/devices/edith_devices.html")
 
 
 
@@ -143,10 +143,10 @@ def update_device():
 
 
     flash("Dispositivo actualizado correctamente", "success")
-    return render_template('devices/view_devices.html',get_devices = get_devices)
+    return render_template('Home/homesoport/devices/view_devices.html',get_devices = get_devices)
 
     
-@edith_bp.route('devices/maintenance',methods=['GET','POST'])
+@edith_bp.route('/maintenance',methods=['GET','POST'])
 @login_required
 def maintenance():
     if current_user.rol != "Admin":
@@ -167,11 +167,11 @@ def maintenance():
             existing_id.state = 'maintenance'
             db.session.commit()
             flash("El dispositivo entro en mantenimiento","success")
-            return render_template('devices/view_devices.html',get_devices=get_devices)   
+            return render_template('Home/homesoport/devices/view_devices.html',get_devices=get_devices)   
         else:
             return flash("No fue posdible llevar dispositivo a mantenimiento","error")
     
-    return render_template("devices/maintenance.html")
+    return render_template("Home/homesoport/maintenance/maintenance.html")
 
 @edith_bp.route('devices/repaired',methods=['GET','POST'])
 @login_required
@@ -190,8 +190,8 @@ def repaired():
             existing_id.state = 'Repaired'
             db.session.commit()
             flash("El dispositivo fue reparado","success")
-            return render_template("devices/maintenance.html",get_maintenance=get_maintenance)
+            return render_template("Home/homesoport/maintennance/maintenance.html",get_maintenance=get_maintenance)
         else:
             flash("Dispositivo no dado de alta","error")
     
-    return render_template("devices/maintenance.html", get_maintenance=get_maintenance)
+    return render_template("Home/homesoport/maintenance/maintenance.html", get_maintenance=get_maintenance)

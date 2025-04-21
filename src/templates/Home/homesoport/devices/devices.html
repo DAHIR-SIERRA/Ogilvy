@@ -1,0 +1,109 @@
+{% extends 'Home/layout.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+
+<body class="bg-gray-900 text-white flex flex-col items-center mt-[80px]">
+    <!-- Título principal -->
+    <div
+        class="w-full max-w-[500px] h-40 flex items-center justify-center rounded-lg border border-gray-900 my-10 bg-gray-800 transition-transform duration-300 hover:scale-105">
+        <h1
+            class="text-2xl sm:text-4xl font-bold text-center bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-transparent bg-clip-text">
+            Device Registration
+        </h1>
+    </div>
+
+    <!-- Contenedor del formulario -->
+    <main class="w-full max-w-5xl px-4">
+        <form action="{{ url_for('devi.devices') }}" method="POST" enctype="multipart/form-data"
+            class="bg-gray-800 p-6 rounded-lg shadow-lg">
+
+
+
+            <!-- Campos del formulario -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {% for field in [
+                ('brand', 'Brand'),
+                ('charger', 'Charger'),
+                ('device_serial', 'Device Serial'),
+                ('model', 'Model'),
+                ('activo', 'Activo'),
+                ('processor', 'Processor'),
+                ('ram', 'RAM'),
+                ('hard_disk', 'Hard Disk'),
+                ('keyboard', 'Keyboard'),
+                ('mouse', 'Mouse'),
+                ('active_tablet', 'Active Tablet'),
+                ('serial_tablet', 'Serial Tablet'),
+                ('screen', 'Screen')
+                ] %}
+                <div>
+                    <label for="{{ field[0] }}" class="block mb-2">{{ field[1] }}</label>
+                    <input type="text" name="{{ field[0] }}" id="{{ field[0] }}" required
+                        class="w-full px-4 py-2 bg-gray-700 rounded">
+                </div>
+                {% endfor %}
+
+                <!-- Selectores -->
+                {% for select in [
+                ('type_equipment', 'Type Equipment', ['Desktop', 'Laptop']),
+                ('base', 'Base', ['SI', 'NO']),
+                ('multi_adapter', 'Multi Adapter', ['SI', 'NO'])
+                ] %}
+                <div>
+                    <label for="{{ select[0] }}" class="block mb-2">{{ select[1] }}</label>
+                    <select name="{{ select[0] }}" class="w-full px-4 py-2 bg-gray-700 rounded">
+                        {% for option in select[2] %}
+                        <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endfor %}
+
+                <!-- Campo de Imagen -->
+                <div class="col-span-full">
+                    <label for="img" class="block mb-2 font-semibold">Photo</label>
+                    <div
+                        class="flex items-center justify-center bg-gray-700 rounded px-4 py-2 cursor-pointer hover:bg-gray-600 transition">
+                        <input type="file" name="img" id="img" accept="image/*" class="hidden"
+                            onchange="mostrarNombre()">
+                        <label for="img" class="text-sm text-gray-300 hover:text-blue-400">Click para subir una imagen</label>
+                    </div>
+                    <p id="file-name" class="mt-2 text-sm text-gray-400 text-center"></p>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="col-span-full">
+                    <label for="observations" class="block mb-2">Observations</label>
+                    <textarea name="observations" id="observations" required
+                        class="w-full px-4 py-2 bg-gray-700 rounded" placeholder="Observations"></textarea>
+                </div>
+            </div>
+
+            <!-- Botón de enviar -->
+            <div class="flex justify-center mt-6">
+                <button type="submit"
+                    class="px-6 py-3 text-white rounded bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
+                    Register
+                </button>
+            </div>
+        </form>
+       
+    </main>
+</body>
+
+{% endblock %}
+<script>
+ 
+    function mostrarNombre() {
+        const input = document.getElementById('img');
+        const fileName = document.getElementById('file-name');
+        fileName.textContent = input.files.length > 0 ? input.files[0].name : '';
+    }
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+</script>

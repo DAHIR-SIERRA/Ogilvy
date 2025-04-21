@@ -29,7 +29,7 @@ def departament():
 
     # Obtener todos los departamentos de la base de datos
     departamentos = Departament.query.all()
-    return render_template("departaments.html", departamentos= departamentos)
+    return render_template("Home/homesoport/departments/departments.html", departamentos= departamentos)
 
 @departament_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
@@ -72,9 +72,7 @@ def update(id):
             flash("Departamento no encontrado", "error")
             return redirect(url_for('departament.departament'))
     
-    # Si es un GET, prellenar el formulario con los datos actuales
-    if departamento:
-        return render_template("update_departament.html", departamento=departamento)
+
     else:
         flash("Departamento no encontrado", "error")
         return redirect(url_for('departament.departament'))

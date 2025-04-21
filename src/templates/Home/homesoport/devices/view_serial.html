@@ -15,13 +15,17 @@
 
     {% if get_device %}
     <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-3xl ">
-        <div class="flex justify-center mb-6">
+           <!-- Imagen del dispositivo -->
+           <div class="flex justify-center mb-5">
             {% if get_device and get_device.img %}
-            <img src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}" alt="Device Image"
-                class="max-w-40 w-full max-h-40 h-full border-4 rounded-xl">
-
+            <img src="{{ url_for('static', filename='uploads/' + get_device.img.split('/')[-1]) }}"
+                alt="Device Image"
+                class="w-64 h-64 object-cover rounded-xl border border-gray-600 shadow-lg bg-white" />
             {% else %}
-            <p class="text-red-400">No image available</p>
+            <div
+                class="w-64 h-64 flex items-center justify-center text-gray-400 bg-gray-200 rounded-xl border border-gray-300">
+                No image available
+            </div>
             {% endif %}
         </div>
 
@@ -49,14 +53,16 @@
                 <p><strong>Screen:</strong> {{ get_device.screen }}</p>
                 <p><strong>Multi Adapter:</strong> {{ get_device.multi_adapter }}</p>
                 <p><strong>Base:</strong> {{ get_device.base }}</p>
+                <p><strong>Status:</strong> <span class="text-green-400">{{ get_device.state }}</span></p>
             </div>
         </div>
 
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300 mt-6">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-3 text-gray-300 mt-6">
+            
             <p><strong>Active Tablet:</strong> {{ get_device.active_tablet }}</p>
             <p><strong>Serial Tablet:</strong> {{ get_device.serial_tablet }}</p>
-            <p><strong>Status:</strong> <span class="text-green-400">{{ get_device.state }}</span></p>
+            
         </div>
 
         <div class="mt-4 text-gray-400">

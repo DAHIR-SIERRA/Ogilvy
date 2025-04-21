@@ -92,7 +92,7 @@ def devices():
         flash("Dispositivo registrado", "success")
         return redirect(url_for('devi.devices'))
 
-    return render_template('devices/devices.html')
+    return render_template('Home/homesoport/devices/devices.html')
 
 @devices_bp.route('/view_devices', methods=['GET', 'POST'])
 @login_required
@@ -102,7 +102,7 @@ def view_devices():
         return redirect(url_for('homeSoport.homeUser'))
     get_devices = Device.query.filter(Device.state != 'maintenance').all()
 
-    return render_template('devices/view_devices.html',get_devices=get_devices)
+    return render_template('Home/homesoport/devices/view_devices.html',get_devices=get_devices)
 
 @devices_bp.route('/deviceUser', methods=['GET', 'POST'])
 @login_required
@@ -114,5 +114,5 @@ def deviceUser():
     # Consulta los dispositivos asociados al usuario actual
     my_devices = db.session.query(Device).join(User, Device.user_idDocument == User.idDocument).filter(User.id == current_user.id).all()
 
-    return render_template('devices/deviceUser.html', my_devices=my_devices)
+    return render_template('Home/homesoport/devices/deviceUser.html', my_devices=my_devices)
 

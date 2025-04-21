@@ -1,0 +1,212 @@
+{% extends 'Home/layout.html' %}
+
+{% block title %}Assignment{% endblock %}
+
+{% block content %}
+
+   <body class="p-6 mt-[80px] bg-gray-900 text-white">
+    <div class="container mx-auto max-w-7xl space-y-10">
+
+        <!-- Tabla de dispositivos -->
+        <div class="bg-gray-900 p-4 shadow-md rounded-lg ">
+            <div class="mb-4">
+                <input type="text" id="search-device" placeholder="Search by serial..."
+                    class="w-52 sm:w-[250px] p-2 text-gray-900 rounded-md border border-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
+            </div>
+            <div class="max-h-[225px] overflow-y-auto">
+                <div class="max-h-[200px] overflow-y-auto">
+                    <table class="table-auto w-full border-collapse border border-gray-600" id="device-table">
+                        <thead class="sticky top-0">
+                            <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
+                                <th class="border border-gray-600 px-4 py-2">Brand</th>
+                                <th class="border border-gray-600 px-4 py-2">Model</th>
+                                <th class="border border-gray-600 px-4 py-2">Serial</th>
+                                <th class="border border-gray-600 px-4 py-2">State</th>
+                                <th class="border border-gray-600 px-4 py-2">User idDocument</th>
+                                <th class="border border-gray-600 px-4 py-2">Observations</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for device in get_all_serials %}
+                            <tr ondblclick="copyToForm(this)"
+                                class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer">
+                                <td class="border border-gray-600 px-4 py-2">{{ device.brand }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ device.model }}</td>
+                                <td class="border border-gray-600 px-4 py-2 "><form action="{{ url_for('add.view_serial') }}" method="POST">
+                                    <input type="hidden" name="serial" value="{{ device.device_serial }}">
+                                    <button type="submit" class="text-blue-300 hover:text-blue-600">{{
+                                        device.device_serial }}</button>
+                                </form></td>
+                                <td class="border border-gray-600 px-4 py-2">{{ device.state }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ device.user_idDocument }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ device.observations }}</td>
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="p-4 bg-gray-900 bg-opacity-90 rounded-lg shadow-md">
+            <form id="user-form" action="{{ url_for('add.assignment') }}" method="POST">
+                <input type="hidden" name="action" id="form-action" value="assign">
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-700 text-sm">
+                        <thead class="bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 text-black text-center sticky top-0 z-10">
+                            <tr>
+                                <th class="border border-gray-700 px-3 py-1">Brand</th>
+                                <th class="border border-gray-700 px-3 py-1">Model</th>
+                                <th class="border border-gray-700 px-3 py-1">Serial</th>
+                                <th class="border border-gray-700 px-3 py-1">State</th>
+                                <th class="border border-gray-700 px-3 py-1">User idDocument</th>
+                                <th class="border border-gray-700 px-3 py-1">Observations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-gray-800 hover:bg-gray-700 transition text-white">
+                                <td class="border border-gray-700 px-3 py-1">
+                                    <input type="text" id="form-brand" name="brand"
+                                        class="bg-transparent text-white w-full outline-none text-center" readonly>
+                                </td>
+                                <td class="border border-gray-700 px-3 py-1">
+                                    <input type="text" id="form-model" name="model"
+                                        class="bg-transparent text-white w-full outline-none text-center" readonly>
+                                </td>
+                                <td class="border border-gray-700 px-3 py-1">
+                                    <input type="text" id="form-device_serial" name="device_serial"
+                                        class="bg-transparent text-white w-full outline-none text-center" readonly>
+                                </td>
+                                <td class="border border-gray-700 px-3 py-1">
+                                    <input type="text" id="form-state" name="state"
+                                        class="bg-transparent text-white w-full outline-none text-center" readonly>
+                                </td>
+                                <td class="border border-gray-700 px-3 py-1">
+                                    <input type="text" id="form-user_idDocument" name="idDocument"
+                                        class="bg-transparent text-white w-full outline-none text-center">
+                                </td>
+                                <td class="border border-gray-700 px-3 py-1">
+                                    <input type="text" id="form-observations" name="observations"
+                                        class="bg-transparent text-white w-full outline-none text-center">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4 space-x-4">
+                    <button type="submit" onclick="document.getElementById('form-action').value='assign'"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200 shadow-md">
+                        Assign
+                    </button>
+
+                    <button type="submit" onclick="document.getElementById('form-action').value='delete'"
+                        class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200 shadow-md">
+                        Descollate
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabla de usuarios -->
+        <div class="bg-gray-900 bg-opacity-90 p-4 rounded-lg shadow-md">
+            <div class="mb-4">
+                <input type="text" id="search-user" placeholder="Search by Username..."
+                    class="w-52 sm:w-[250px] p-2 text-gray-900 rounded-md border border-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
+            </div>
+            <div class="max-h-[225px] overflow-y-auto">
+                <div class="max-h-[200px] overflow-y-auto">
+                    <table id="user-table" class="w-full border-collapse border border-gray-600 rounded-lg text-gray-300">
+                        <thead class="bg-gray-800 text-white text-sm uppercase tracking-wide sticky top-0">
+                            <tr>
+                                <th class="border border-gray-600 px-4 py-2">Username</th>
+                                <th class="border border-gray-600 px-4 py-2">Full name</th>
+                                <th class="border border-gray-600 px-4 py-2">Department</th>
+                                <th class="border border-gray-600 px-4 py-2">Position</th>
+                                <th class="border border-gray-600 px-4 py-2">Id Document</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user, department_name, position_name in get_key %}
+                            <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer text-center">
+                                <td class="border border-gray-600 px-4 py-2">{{ user.username }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ user.fullname }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ department_name }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ position_name }}</td>
+                                <td class="border border-gray-600 px-4 py-2">{{ user.idDocument }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+            </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+
+    <script>
+        function copyToForm(row) {
+            let cells = row.getElementsByTagName("td");
+            document.getElementById("form-brand").value = cells[0].innerText;
+            document.getElementById("form-model").value = cells[1].innerText;
+            document.getElementById("form-device_serial").value = cells[2].innerText;
+            document.getElementById("form-state").value = cells[3].innerText;
+            document.getElementById("form-user_idDocument").value = cells[4].innerText;
+            document.getElementById("form-observations").value = cells[5].innerText;
+            
+        }
+
+        function filterTable(inputId, tableId, columnIndex) {
+            document.getElementById(inputId).addEventListener("input", function () {
+                let filter = this.value.toLowerCase();
+                let rows = document.querySelectorAll(`#${tableId} tbody tr`);
+                rows.forEach(row => {
+                    let cell = row.getElementsByTagName("td")[columnIndex];
+                    if (cell) {
+                        let text = cell.textContent.toLowerCase();
+                        row.style.display = text.includes(filter) ? "" : "none";
+                    }
+                });
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            filterTable("search-device", "device-table", 2),
+                filterTable("search-user", "user-table", 0);
+        });
+
+
+        function copyToClipboard(button) {
+            // Encuentra el <td> más cercano al botón
+            const tdElement = button.closest("td");
+
+            if (tdElement) {
+                // Obtiene el texto del <span> dentro del mismo <td>
+                const textToCopy = tdElement.querySelector("span").innerText;
+
+                // Copia el texto al portapapeles
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert("Copiado: " + textToCopy);
+                }).catch(err => {
+                    console.error("Error al copiar: ", err);
+                });
+            }
+        }
+        setTimeout(() => {
+            const flashMessages = document.getElementById("flash-messages");
+            if (flashMessages) {
+                flashMessages.style.transition = "opacity 0.5s";
+                flashMessages.style.opacity = "0";
+                setTimeout(() => flashMessages.remove(), 500);
+            }
+        }, 3000); // Desaparece después de 3 segundos
+
+    </script>
+</body>
+{% endblock %}

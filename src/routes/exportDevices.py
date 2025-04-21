@@ -12,7 +12,7 @@ def export_page():
      if current_user.rol != "Admin":
         flash("Acceso denegado", "error")
         return redirect(url_for('homeSoport.homeUser'))
-     return render_template('export.html')
+     return render_template('Home/homesoport/import_and_export/export.html')
 
 @export_bp.route('/ajax_export', methods=['GET'])
 @login_required
